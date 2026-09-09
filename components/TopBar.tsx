@@ -172,7 +172,7 @@ export default function TopBar({
                       active={activeArea === area}
                       onClick={() => pickOne(() => onSelectArea(activeArea === area ? null : area))}
                     >
-                      📍 {area}
+                      {area}
                     </Chip>
                   ))}
                 </div>

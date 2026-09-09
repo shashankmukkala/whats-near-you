@@ -147,10 +147,10 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
   // chip or typed query — combining both into one label.
   const resultsMatch: SearchGroupMatch = (() => {
     const parts: string[] = [];
-    if (liveOnly) parts.push("● Live now");
-    if (activeArea) parts.push(`📍 ${activeArea}`);
+    if (liveOnly) parts.push("Live now");
+    if (activeArea) parts.push(activeArea);
     for (const tag of activeTags) parts.push(tag);
-    if (maxDistanceKm > 0) parts.push(`📏 <${maxDistanceKm}km`);
+    if (maxDistanceKm > 0) parts.push(`within ${maxDistanceKm}km`);
     if (searchMatch?.label) parts.push(searchMatch.label);
     if (parts.length === 0) return null;
     return { label: parts.join(" · "), places: displayedPlaces };

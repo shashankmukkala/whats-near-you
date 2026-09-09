@@ -82,9 +82,12 @@ export default function PhotoUpload({ value, onChange, label = "Photo" }: PhotoU
             onClick={() => inputRef.current?.click()}
             className="flex h-32 w-full flex-col items-center justify-center gap-1.5 rounded-[1.25rem] border border-dashed border-[var(--ink-line-strong)] bg-[#ffffff80] text-[var(--ink-muted)] transition-colors hover:border-[var(--accent)] hover:bg-[var(--accent-wash)]"
           >
-            <span className="text-xl" aria-hidden="true">🖼</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" aria-hidden="true">
+              <path d="M3 16.5 8 12l3.5 3L15 11l6 5.5M3 5h18v14H3z" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+            </svg>
             <span className="text-sm font-semibold">Add a photo</span>
-            <span className="text-[11px]">PNG, JPG or WebP · up to 5MB</span>
+            <span className="text-[11px]">PNG, JPG or WebP, up to 5MB</span>
           </button>
         )}
       </div>

@@ -192,7 +192,7 @@ export function matchSearchGroup(query: string, places: Place[], tagVocabulary: 
 
   if (wantsLiveNow) {
     result = result.filter((p) => isLiveNow(p));
-    labelParts.push("● Live now");
+    labelParts.push("Live now");
   }
   if (tagMatch) {
     result = result.filter((p) => p.tags.includes(tagMatch));
@@ -200,7 +200,7 @@ export function matchSearchGroup(query: string, places: Place[], tagVocabulary: 
   }
   if (areaMatch) {
     result = result.filter((p) => p.area === areaMatch);
-    labelParts.push(`📍 ${areaMatch}`);
+    labelParts.push(areaMatch);
   }
 
   return { label: labelParts.join(" · "), places: result };
