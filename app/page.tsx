@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import SiteHeader from "@/components/SiteHeader";
-import HeroArt from "@/components/HeroArt";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { isCurrent, isLiveNow, SEASON_ENDS_AT, SEASON_STARTS_AT } from "@/lib/season";
 import type { Place } from "@/lib/supabase";
@@ -74,13 +74,35 @@ export default async function Home({
           }}
         />
         <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
-          <HeroArt className="order-first mx-auto w-full max-w-sm lg:order-last lg:max-w-none" />
+          {/* The cutout, not the original. The artwork ships on a flat
+              #fdf9ef ground, a shade lighter than the page, which left a
+              pale square around it. mix-blend-multiply was tried first and
+              is worse: it converts that into a DARKER square wherever the
+              hero gradient sits behind it. scripts/cutout-hero.mjs makes
+              the ground genuinely transparent as a one-off build step,
+              with an alpha ramp across the anti-aliased edge so the
+              linework stays smooth against any colour behind it.
+
+              next/image rather than a plain img: the source is a 1.3MB PNG
+              and the largest thing on the page, so it is also the LCP
+              element. Next serves it resized as WebP/AVIF, and the
+              priority flag stops it queueing behind everything else. */}
+          <div className="order-first mx-auto w-full max-w-sm lg:order-last lg:max-w-none">
+            <Image
+              src="/ganesha-cutout.png"
+              alt="An illustration of Ganesha with a child offering prayers"
+              width={1254}
+              height={1254}
+              priority
+              sizes="(max-width: 1023px) 22rem, 40vw"
+              className="h-auto w-full"
+            />
+          </div>
 
           <div className="text-center lg:text-left">
           <span className="section-eyebrow">Ganesh Chaturthi {new Date(SEASON_STARTS_AT).getFullYear()}</span>
           <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-[var(--ink)] sm:text-6xl">
-            Every pandal in the city,
-            <br className="hidden sm:block" /> on one map.
+            Every pandal in the city, on one map.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[var(--ink-muted)] sm:text-lg lg:mx-0">
             Find the Ganesh pandals near you, see which ones are open right now, and get directions
