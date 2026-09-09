@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-// Plus Jakarta Sans reads more distinctive/premium than a system-ish
-// default at UI sizes (rounded terminals, tighter numerals) — used for
-// every weight in the app now, not just headings.
-const sans = Plus_Jakarta_Sans({
+// Geist. Its numerals and tighter apertures hold up at the small sizes
+// this UI leans on, and 800 is needed for the landing headlines.
+const sans = Geist({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],

@@ -4401,3 +4401,164 @@ body {
 /* The aircraft banner and its admin preview keep their own dark palette on
    purpose: it is an advertiser's creative being towed across the sky, not
    a surface of ours, and a cream banner on a cream map would vanish. */
+
+/* ==========================================================================
+   COMPONENT LAYER
+   --------------------------------------------------------------------------
+   The button, card, chip and field primitives, written to the same
+   measurements as the reference design so surfaces built from them share
+   its rhythm rather than approximating it: 0.9rem control radius against a
+   1.75rem card radius, 650 as the control weight (a half-step between
+   semibold and bold, which is what stops chips shouting), and one
+   cubic-bezier(.2,.8,.2,1) for every transition and entrance.
+
+   Everything is expressed in the palette tokens above, so the one
+   substantive divergence — plum for sponsored, because we sell ad
+   inventory and the reference does not distinguish it — flows through
+   automatically instead of needing a parallel set of classes.
+   ========================================================================== */
+
+.btn-primary,
+.btn-secondary,
+.btn-ghost {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border-radius: 0.9rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  padding: 0.65rem 1.15rem;
+  font-weight: 700;
+  color: #fff8f0;
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-accent);
+  transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.16s, filter 0.16s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+}
+
+.btn-primary:disabled {
+  opacity: 0.55;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  padding: 0.65rem 1.15rem;
+  font-weight: 650;
+  color: var(--ink);
+  background: #fff9;
+  border: 1px solid #2b160824;
+  transition: background-color 0.16s, border-color 0.16s, transform 0.16s;
+}
+
+.btn-secondary:hover {
+  background: #fff;
+  border-color: var(--accent-tint);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  padding: 0.5rem 0.9rem;
+  font-weight: 650;
+  color: var(--ink-muted);
+  transition: background-color 0.16s, color 0.16s;
+}
+
+.btn-ghost:hover {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.card-elevated {
+  border: 1px solid var(--accent-tint);
+  border-radius: 1.75rem;
+  background: var(--gradient-panel);
+  box-shadow: var(--shadow-card);
+  animation: card-in 0.26s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.card-glass {
+  border: 1px solid #fff9;
+  border-radius: 1.75rem;
+  background-color: #fffdf8b3;
+  backdrop-filter: blur(26px) saturate(160%);
+  -webkit-backdrop-filter: blur(26px) saturate(160%);
+  box-shadow: 0 32px 80px -22px #2b160838, inset 0 1px #fffc;
+  animation: card-in 0.26s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* Blur is the single most expensive thing on a page that stacks glass over
+   a live map, and a mid-range phone re-samples it every frame. */
+@media (pointer: coarse) {
+  .card-glass {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-elevated,
+  .card-glass {
+    animation: none;
+  }
+}
+
+.section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 9999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  color: var(--accent-info);
+  background: var(--accent-info-tint);
+}
+
+.badge-soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 9999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  color: var(--accent-deep);
+  background: var(--accent-wash);
+}
+
+/* The draggable pin on the submission map picker. Larger than a map
+   marker on purpose — it is a target being dragged with a thumb, not a
+   label being read. */
+.picker-pin {
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px 9999px 9999px 2px;
+  transform: rotate(-45deg);
+  background: var(--gradient-accent);
+  border: 3px solid #fff;
+  box-shadow: 0 8px 20px -6px #b8460c99;
+  cursor: grab;
+}
+
+.picker-pin:active {
+  cursor: grabbing;
+}

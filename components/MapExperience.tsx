@@ -604,7 +604,6 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
 
         <div className="relative z-20">
           <TopBar
-            map={map}
             // Handed the list filtered by everything EXCEPT area (see
             // areaAgnosticPlaces) — an area named in the search text
             // reconciles with the manual chip rather than being searched
@@ -654,7 +653,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
 
         <div className="map-content-layer relative z-10 flex min-h-0 flex-1 flex-col gap-1.5 sm:gap-2 lg:flex-row">
           <div className="map-canvas-shell relative h-[min(56dvh,34rem)] min-h-[18rem] min-w-0 shrink-0 overflow-hidden rounded-3xl shadow-xl sm:h-[50vh] lg:h-auto lg:flex-1">
-            <MapView placingMode={placingMode} onMapClick={handleMapClick} onMapReady={setMap} showRotationControls />
+            <MapView placingMode={placingMode} onMapClick={handleMapClick} onMapReady={setMap} />
             <PlaceMarkers
               map={map}
               places={displayedPlaces}

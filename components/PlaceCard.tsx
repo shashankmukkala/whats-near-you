@@ -102,7 +102,10 @@ export default function PlaceCard(props: PlaceCardProps) {
    * same lie in a different shape.
    */
   async function share() {
-    const base = `${window.location.origin}${window.location.pathname}`;
+    // Always /map, never window.location.pathname: this card also opens
+    // on /admin, and a link shared from there would send a visitor to a
+    // sign-in screen instead of the pandal.
+    const base = `${window.location.origin}/map`;
     const url = isPlace ? `${base}?place=${encodeURIComponent(item.id)}` : base;
     if (navigator.share) {
       try {

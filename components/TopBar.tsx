@@ -2,14 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import type { Map as MapLibreMap } from "maplibre-gl";
 import SearchBox, { type SearchGroupMatch } from "@/components/SearchBox";
-import { DEFAULT_BEARING, DEFAULT_PITCH } from "@/lib/mapStyle";
 import LiveTicker from "@/components/LiveTicker";
 import type { CityEvent, Place } from "@/lib/supabase";
 
 type TopBarProps = {
-  map: MapLibreMap | null;
   places: Place[];
   areaVocabulary: string[];
   tagVocabulary: string[];
@@ -37,7 +34,6 @@ type TopBarProps = {
 const DISTANCE_OPTIONS = [1, 3, 5, 8, 10, 15];
 
 export default function TopBar({
-  map,
   places,
   areaVocabulary,
   tagVocabulary,
@@ -58,10 +54,6 @@ export default function TopBar({
   locationStatus,
   events = [],
 }: TopBarProps) {
-  // Opens flat, not tilted. Tilt makes clustered pins occlude each other,
-  // and three of the pandals in Ram Nagar sit within about two hundred
-  // metres of one another — so 3D is opt-in.
-  const [is3D, setIs3D] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const filtersRef = useRef<HTMLDivElement>(null);
 
@@ -82,13 +74,6 @@ export default function TopBar({
   function pickOne(apply: () => void) {
     apply();
     setFiltersOpen(false);
-  }
-
-  function toggle3D() {
-    if (!map) return;
-    const next = !is3D;
-    setIs3D(next);
-    map.easeTo({ pitch: next ? DEFAULT_PITCH : 0, bearing: next ? DEFAULT_BEARING : 0, duration: 600 });
   }
 
   const activeCount = (activeArea ? 1 : 0) + activeTags.size + (maxDistanceKm > 0 ? 1 : 0) + (liveOnly ? 1 : 0);
@@ -243,16 +228,9 @@ export default function TopBar({
       </div>
 
       <div className="topbar-account ml-auto flex items-center gap-1.5">
-        <button onClick={toggle3D} className={`chip-trigger ${is3D ? "is-active" : ""}`}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4">
-            <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
-            <path d="M12 3v18M4 7.5l8 4.5 8-4.5" />
-          </svg>
-          <span className="hidden sm:inline">{is3D ? "3D" : "2D"}</span>
-        </button>
         {publicMode && (
-          <Link href="/advertise" className="advertise-cta hidden sm:inline-flex">
-            Advertise
+          <Link href="/submit" className="btn-primary hidden sm:inline-flex">
+            Add a pandal
           </Link>
         )}
       </div>
