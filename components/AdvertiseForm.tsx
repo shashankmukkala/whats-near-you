@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import PhotoUpload from "@/components/PhotoUpload";
+import UpiQr from "@/components/UpiQr";
 import { AD_PLACEMENTS, UPI_ID, upiLink, type AdPlacementId } from "@/lib/adPlacements";
 
 export default function AdvertiseForm({ placement }: { placement: AdPlacementId }) {
@@ -125,7 +126,16 @@ export default function AdvertiseForm({ placement }: { placement: AdPlacementId 
             />
           ))}
           {banners.length < config.maxImages && (
-            <PhotoUpload label="" value="" onChange={(url) => url && setBanners((prev) => [...prev, url])} />
+            // Keyed on the count so it REMOUNTS after each upload. Without
+            // that, this uploader keeps its own preview after handing the
+            // URL up, and the banner renders twice: once in the list above
+            // and once still sitting in the adder.
+            <PhotoUpload
+              key={banners.length}
+              label=""
+              value=""
+              onChange={(url) => url && setBanners((prev) => [...prev, url])}
+            />
           )}
         </div>
       </div>
@@ -149,16 +159,23 @@ export default function AdvertiseForm({ placement }: { placement: AdPlacementId 
             Payment is not set up yet. Call us and we will take it directly — nothing has been charged.
           </p>
         ) : (
-          <div className="mt-3">
-            <p className="text-[13px] text-[var(--ink-muted)]">
-              Pay by UPI to <code className="font-semibold text-[var(--accent-deep)]">{UPI_ID}</code>, then upload the
-              screenshot below.
-            </p>
-            {pay && (
-              <a href={pay} className="btn-primary mt-3">
-                Pay ₹{config.priceInr} by UPI
-              </a>
-            )}
+          <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-start">
+            {pay && <UpiQr value={pay} />}
+            <div className="min-w-0">
+              <p className="text-[13px] leading-relaxed text-[var(--ink-muted)]">
+                Scan the code, or pay by UPI to{" "}
+                <code className="font-semibold text-[var(--accent-deep)]">{UPI_ID}</code>. Then upload the screenshot
+                below.
+              </p>
+              {/* The deep link is the phone path — it opens GPay or PhonePe
+                  with the amount already filled. The QR beside it is the
+                  laptop path, where this link does nothing at all. */}
+              {pay && (
+                <a href={pay} className="btn-primary mt-3 sm:hidden">
+                  Pay ₹{config.priceInr} by UPI
+                </a>
+              )}
+            </div>
           </div>
         )}
       </div>
