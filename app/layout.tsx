@@ -18,12 +18,43 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const FALLBACK_SITE_URL = "http://localhost:3000";
+
+/**
+ * Resolves NEXT_PUBLIC_SITE_URL into a real URL, tolerantly.
+ *
+ * This value is typed by a human into a hosting dashboard, and the
+ * overwhelmingly common slip is pasting the bare domain that the
+ * dashboard displays — "whats-near-u.vercel.app" — without a scheme.
+ * `new URL()` throws on that, and because this runs at module scope in
+ * the root layout, the throw took down the entire production build with
+ * `Failed to collect configuration for /_not-found`, an error naming a
+ * route that has nothing to do with the cause. That is a genuinely awful
+ * way to spend twenty minutes.
+ *
+ * A missing scheme is an unambiguous typo with exactly one sensible
+ * repair, so it gets repaired. Anything still unparseable falls back to
+ * localhost: link previews degrade, which is bad, but the site deploys,
+ * which is the difference between a bad preview and no site at all.
+ */
+function resolveSiteUrl(): URL {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!raw) return new URL(FALLBACK_SITE_URL);
+
+  const withScheme = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    return new URL(withScheme);
+  } catch {
+    return new URL(FALLBACK_SITE_URL);
+  }
+}
+
 export const metadata: Metadata = {
   // Link crawlers refuse relative image URLs, so every og:image has to
   // resolve to an absolute one. Next builds that from metadataBase — set
-  // NEXT_PUBLIC_SITE_URL in production or previews will point at the
-  // deploy's own localhost and unfurl with no image at all.
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  // NEXT_PUBLIC_SITE_URL in production, or previews point at the deploy's
+  // own localhost and unfurl with no image at all.
+  metadataBase: resolveSiteUrl(),
   title: "WhatsNearYou",
   description: "A live map of Hyderabad's Ganesh pandals — what's near you, and what's on now.",
 };
