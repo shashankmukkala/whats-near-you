@@ -137,6 +137,39 @@ npm run dev
 - `/admin` — the same map with the operator tools, behind sign-in
 - `/advertise` — the public enquiry form
 
+## 7. Deploy
+
+Vercel → **Add New → Project** → import `shashankmukkala/whats-near-you`.
+Framework, build command and output directory are all detected; nothing to
+change there.
+
+Add four environment variables **before the first deploy**, each for
+Production, Preview and Development:
+
+| Name | Value |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | same as `.env.local` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | same as `.env.local` |
+| `SUPABASE_SERVICE_ROLE_KEY` | same as `.env.local` |
+| `NEXT_PUBLIC_SITE_URL` | the deployment's own URL — see below |
+
+`NEXT_PUBLIC_SITE_URL` is a chicken-and-egg: you do not know the URL until
+after the first deploy. Deploy once, copy the domain Vercel assigns, set
+the variable, then redeploy. Skipping it is not cosmetic — it is
+`metadataBase`, so every link preview would advertise an `og:image` at the
+deployment's own localhost and forwards would unfurl with no image.
+
+`vercel.json` pins functions to **`sin1` (Singapore)**, the same region as
+the Supabase project. Each page load makes three database round trips
+(`/api/places`, `/api/events`, `/api/billboards`), so those dominate the
+latency — putting the functions next to the database beats putting them
+next to the user. If you ever move the database, move this too.
+
+The build itself needs no environment variables (the Supabase client is
+created lazily), so a misconfigured deploy will build fine and then serve
+an empty map rather than failing loudly. After deploying, check
+`https://<your-domain>/api/places` returns 15 rows.
+
 ---
 
 ## The season
