@@ -1,13 +1,14 @@
 "use client";
 
 import type { CityEvent } from "@/lib/supabase";
+import { istToday } from "@/lib/season";
 
 type LiveTickerProps = {
   events: CityEvent[];
 };
 
 export default function LiveTicker({ events }: LiveTickerProps) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = istToday();
   const activeEvents = events
     .filter((event) => event.event_date >= today)
     .sort((a, b) => a.event_date.localeCompare(b.event_date))

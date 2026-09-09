@@ -2,6 +2,7 @@
 
 import type { CityEvent } from "@/lib/supabase";
 import PanelShell from "@/components/PanelShell";
+import { istToday } from "@/lib/season";
 
 function formatDate(iso: string) {
   const date = new Date(`${iso}T00:00:00`);
@@ -17,7 +18,8 @@ type EventsPanelProps = {
 };
 
 export default function EventsPanel({ events, isAdmin, onAddClick, onDelete, onClose }: EventsPanelProps) {
-  const today = new Date().toISOString().slice(0, 10);
+  // Hyderabad's today, not the machine's — see istToday.
+  const today = istToday();
   const upcoming = events.filter((e) => e.event_date >= today);
 
   return (

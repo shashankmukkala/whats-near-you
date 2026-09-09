@@ -24,7 +24,7 @@ import { useAdminAuth } from "@/lib/useAdminAuth";
 import { adminFetch } from "@/lib/adminFetch";
 import { MOBILE_QUERY, useMediaQuery } from "@/lib/useMediaQuery";
 import { distanceMeters } from "@/lib/geo";
-import { isCurrent, isLiveNow } from "@/lib/season";
+import { isCurrent, isLiveNow, istToday } from "@/lib/season";
 import { deriveAreas, deriveTags } from "@/lib/vocabulary";
 import { activeBillboards } from "@/lib/adFilter";
 import type { AdminPlace, Billboard, CityEvent, Place } from "@/lib/supabase";
@@ -164,7 +164,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
   // never left alone with nothing beside it either.
   const realPanelCount = (selected ? 1 : 0) + (resultsMatch ? 1 : 0);
   const showEvents = realPanelCount < 2;
-  const upcomingEventCount = events.filter((e) => e.event_date >= new Date().toISOString().slice(0, 10)).length;
+  const upcomingEventCount = events.filter((e) => e.event_date >= istToday()).length;
 
   // The results carousel shows 5 rows, but that only fits when it is the
   // only panel in the column. Once a card is stacked above it (or the

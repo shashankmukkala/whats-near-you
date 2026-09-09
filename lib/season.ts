@@ -58,17 +58,50 @@ export function daysUntilEnd(place: Place, now: number = Date.now()): number | n
 }
 
 /**
+ * Every festival date in this product is a Hyderabad date, so all of them
+ * are formatted in Hyderabad's zone — never the machine's.
+ *
+ * This is not a nicety. `starts_at` is stored as 2026-09-14T00:00:00+05:30,
+ * which is 18:30 on the 13th in UTC. Vercel's servers run in UTC, so the
+ * production link previews and og:description rendered "Opens 13 Sept"
+ * while a laptop in India rendered "Opens 14 Sept" — the bug was invisible
+ * locally and only appeared once deployed.
+ *
+ * Pinning the zone also fixes the client side, which had the subtler
+ * version of the same problem: a visitor abroad would otherwise be shown
+ * the immersion date translated into their own timezone, which is not a
+ * fact about anything. The pandal comes down when it comes down, in
+ * Hyderabad.
+ */
+const IST = "Asia/Kolkata";
+
+export function formatFestivalDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "short", timeZone: IST });
+}
+
+/**
+ * Today's date in Hyderabad, as YYYY-MM-DD.
+ *
+ * `new Date().toISOString().slice(0, 10)` — the obvious way to write this,
+ * and what the news panel and ticker both used — is a UTC date. Between
+ * midnight and 05:30 IST it names *yesterday*, so during those hours an
+ * item dated today read as upcoming rather than live, and yesterday's was
+ * still on the ticker.
+ */
+export function istToday(): string {
+  return new Date(Date.now() + (5 * 60 + 30) * 60_000).toISOString().slice(0, 10);
+}
+
+/**
  * The line under a pandal's name: how long is left, or when it opens.
  * Short enough for a marker tooltip and a card header alike.
  */
 export function seasonLabel(place: Place, now: number = Date.now()): string | null {
   if (!place.ends_at) return null;
-  const end = new Date(place.ends_at);
-  const endText = end.toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+  const endText = formatFestivalDate(place.ends_at);
 
   if (place.starts_at && new Date(place.starts_at).getTime() > now) {
-    const opens = new Date(place.starts_at).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
-    return `Opens ${opens}`;
+    return `Opens ${formatFestivalDate(place.starts_at)}`;
   }
 
   const days = daysUntilEnd(place, now);
