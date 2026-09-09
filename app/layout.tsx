@@ -59,15 +59,17 @@ export const metadata: Metadata = {
   description: "A live map of Hyderabad's Ganesh pandals — what's near you, and what's on now.",
 };
 
-// Dark is the only theme now — no toggle, no stored preference, no
-// light-mode CSS to keep in sync. Applied here directly (not via a
-// client-side hook adding a class after hydration) so there's no
-// flash-of-light-theme on first paint.
+// Light is the only theme — no toggle, no stored preference, no dark CSS
+// to keep in sync. The `dark` class that used to sit here is deliberately
+// gone: it is what switched on every `dark:` Tailwind variant in the tree,
+// so removing it flips the whole component library to its light branch in
+// one move. The warm palette itself lives in globals.css under WARM LIGHT
+// THEME.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", "dark", geistMono.variable, "font-sans", sans.variable)}
+      className={cn("h-full", "antialiased", geistMono.variable, "font-sans", sans.variable)}
     >
       {/* Not overflow-hidden here — that would block normal page scroll
           on every non-map route (/advertise, /admin/ad-enquiries). The

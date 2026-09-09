@@ -102,10 +102,12 @@ export const ROAD_LINE_COLOR_OVERRIDES: Record<string, string> = {
   tunnel_motorway_link_casing: "rgba(255,255,255,0.06)",
 };
 
-// Matches the aurora canvas backdrop behind the map (see
-// BACKGROUND_GRADIENTS' shared dark base in lib/categories.ts) so the map
-// doesn't read as a visually distinct near-black from the page around it.
-export const MAP_BACKGROUND_COLOR = "#0b0b0d";
+// Matches the page's cream ground, so the seam between map and page does
+// not read as two different whites. This was near-black while the map was
+// dark-restyled at runtime; the ramp and road overrides above are from
+// that era and are no longer applied — see the note in components/Map.tsx
+// for why they are kept rather than deleted.
+export const MAP_BACKGROUND_COLOR = "#fdf3e0";
 
 // General-interest POI layers in OpenFreeMap's "liberty" style
 // (poi_r1/r7/r20, source-layer "poi") render every OSM point of interest

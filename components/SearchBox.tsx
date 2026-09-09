@@ -181,7 +181,7 @@ export default function SearchBox({
   return (
     <div className="relative w-full">
       <svg
-        className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-neutral-400"
+        className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-[var(--ink-muted)]"
         viewBox="0 0 20 20"
         fill="none"
         stroke="currentColor"
@@ -203,17 +203,17 @@ export default function SearchBox({
             <button
               key={place.id}
               onClick={() => selectPlace(place)}
-              className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-neutral-200 hover:bg-white/10"
+              className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-[var(--ink)] hover:bg-[var(--accent-tint)]"
             >
               <span aria-hidden="true">📍</span>
               <span className="min-w-0 flex-1 truncate">
                 <span className="font-medium">{place.name}</span>
-                {place.area && <span className="text-neutral-400"> · {place.area}</span>}
+                {place.area && <span className="text-[var(--ink-muted)]"> · {place.area}</span>}
               </span>
             </button>
           ))}
           {matchingPlaces.length === 0 && !groupMatch && (
-            <div className="px-4 py-2 text-sm text-neutral-400">No pandals match that yet.</div>
+            <div className="px-4 py-2 text-sm text-[var(--ink-muted)]">No pandals match that yet.</div>
           )}
         </div>
       )}

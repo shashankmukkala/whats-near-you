@@ -162,7 +162,7 @@ export default function PlaceCard(props: PlaceCardProps) {
         </div>
         <button
           onClick={onClose}
-          className="panel-close-button shrink-0 rounded-full text-neutral-400 hover:bg-white/10 hover:text-neutral-200"
+          className="panel-close-button shrink-0 rounded-full text-[var(--ink-muted)] hover:bg-[var(--accent-tint)] hover:text-[var(--accent-deep)]"
           aria-label="Close"
         >
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">

@@ -75,18 +75,18 @@ export default function SearchResultsPanel({ label, places, onSelect, onClose, p
 
   return (
     <div className="panel-elevated w-full shrink-0 overflow-hidden rounded-3xl">
-      <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3 dark:border-neutral-800/80">
+      <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3 dark:border-[var(--ink-line)]">
         <div className="min-w-0">
-          <div className="truncate text-[13.5px] font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+          <div className="truncate text-[13.5px] font-semibold tracking-tight text-neutral-900 dark:text-[var(--ink)]">
             {label}
           </div>
-          <div className="text-[11px] text-neutral-400">
+          <div className="text-[11px] text-[var(--ink-muted)]">
             {places.length} match{places.length === 1 ? "" : "es"}
           </div>
         </div>
         <button
           onClick={onClose}
-          className="panel-close-button shrink-0 rounded-full text-neutral-400 transition-colors hover:bg-white/10 hover:text-neutral-200"
+          className="panel-close-button shrink-0 rounded-full text-[var(--ink-muted)] transition-colors hover:bg-[var(--accent-tint)] hover:text-[var(--accent-deep)]"
           aria-label="Close"
         >
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="h-4 w-4">
@@ -96,7 +96,7 @@ export default function SearchResultsPanel({ label, places, onSelect, onClose, p
       </div>
 
       {places.length === 0 ? (
-        <div className="px-4 py-6 text-center text-sm text-neutral-400">No pandals match that yet.</div>
+        <div className="px-4 py-6 text-center text-sm text-[var(--ink-muted)]">No pandals match that yet.</div>
       ) : (
         <div className="relative">
           <div
@@ -107,13 +107,13 @@ export default function SearchResultsPanel({ label, places, onSelect, onClose, p
             {pages.map((page, i) => (
               <div
                 key={i}
-                className={`w-full shrink-0 snap-start divide-y divide-neutral-800/80 py-1 ${pages.length > 1 ? "px-9" : "px-2"}`}
+                className={`w-full shrink-0 snap-start divide-y divide-[var(--ink-line)] py-1 ${pages.length > 1 ? "px-9" : "px-2"}`}
               >
                 {page.map((place) => (
                   <button
                     key={place.id}
                     onClick={() => onSelect(place)}
-                    className="flex w-full items-center gap-3 px-2 py-2.5 text-left hover:bg-white/10"
+                    className="flex w-full items-center gap-3 px-2 py-2.5 text-left hover:bg-[var(--accent-tint)]"
                   >
                     {/* A live dot rather than a per-row glyph. Every row
                         here is the same kind of thing, so an icon would
@@ -121,8 +121,8 @@ export default function SearchResultsPanel({ label, places, onSelect, onClose, p
                         standing right now does. */}
                     <span className={`results-row-dot ${isLiveNow(place) ? "is-live" : ""}`} aria-hidden="true" />
                     <div className="min-w-0 flex-1">
-                      <div className="truncate text-sm font-medium text-neutral-100">{place.name}</div>
-                      <div className="truncate text-xs text-neutral-400">
+                      <div className="truncate text-sm font-medium text-[var(--ink)]">{place.name}</div>
+                      <div className="truncate text-xs text-[var(--ink-muted)]">
                         {[place.area, seasonLabel(place)].filter(Boolean).join(" · ")}
                       </div>
                     </div>
@@ -138,7 +138,7 @@ export default function SearchResultsPanel({ label, places, onSelect, onClose, p
                 onClick={() => goToPage(pageIndex - 1)}
                 disabled={pageIndex === 0}
                 aria-label="Previous page"
-                className="absolute top-1/2 left-1 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-neutral-900/80 text-neutral-200 shadow-md hover:bg-white/10 disabled:pointer-events-none disabled:opacity-0"
+                className="absolute top-1/2 left-1 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-[#fffdf8e6] text-[var(--ink)] shadow-md hover:bg-[var(--accent-tint)] disabled:pointer-events-none disabled:opacity-0"
               >
                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                   <path d="M12 5l-5 5 5 5" />
@@ -148,7 +148,7 @@ export default function SearchResultsPanel({ label, places, onSelect, onClose, p
                 onClick={() => goToPage(pageIndex + 1)}
                 disabled={pageIndex === pages.length - 1}
                 aria-label="Next page"
-                className="absolute top-1/2 right-1 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-neutral-900/80 text-neutral-200 shadow-md hover:bg-white/10 disabled:pointer-events-none disabled:opacity-0"
+                className="absolute top-1/2 right-1 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full bg-[#fffdf8e6] text-[var(--ink)] shadow-md hover:bg-[var(--accent-tint)] disabled:pointer-events-none disabled:opacity-0"
               >
                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                   <path d="M8 5l5 5-5 5" />

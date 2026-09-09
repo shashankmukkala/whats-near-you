@@ -153,7 +153,7 @@ export default function TopBar({
         {filtersOpen && (
           <div className="panel-elevated no-scrollbar absolute top-full left-0 z-20 mt-2 max-h-[70vh] w-72 max-w-[85vw] space-y-3 overflow-y-auto rounded-2xl p-3">
             <div className="flex items-center justify-between">
-              <div className="text-xs font-semibold text-neutral-400">Narrow by area or distance</div>
+              <div className="text-xs font-semibold text-[var(--ink-muted)]">Narrow by area or distance</div>
               {activeCount > 0 && (
                 <button
                   onClick={() => {
@@ -217,7 +217,7 @@ export default function TopBar({
                   "pick one to filter", so a permanent hint here would be
                   noise the rest of the time. */}
               {locationStatus === "denied" && (
-                <p className="mt-1.5 text-[11px] text-red-400">
+                <p className="mt-1.5 text-[11px] text-[#c22b1f]">
                   Couldn&apos;t get your location — check location permissions and try again.
                 </p>
               )}

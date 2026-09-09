@@ -3281,3 +3281,615 @@ body {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding: 12px 14px 14px;
 }
+
+/* ==========================================================================
+   WARM LIGHT THEME
+   --------------------------------------------------------------------------
+   Everything above this point was written for a dark product. This section
+   inverts it.
+
+   The insight worth stealing from the reference design is NOT the orange —
+   it is that nothing in the palette is neutral. Text is brown, not black.
+   Shadows are brown-tinted, never grey. Borders are translucent accent,
+   never grey. That is what makes a cream page read as warm rather than as
+   "a white site with orange buttons", and it is the part most redesigns
+   miss.
+
+   ONE COLOUR, ONE MEANING still holds, and matters more here than before:
+
+     saffron #ea6c1d   primary action, the product's own voice
+     coral   #e8543f   live, urgent, "on right now"
+     green   #2f7a41   verified, confirmed, informational
+     plum    #7d3560   SPONSORED ONLY
+
+   The plum is an addition, not a borrowing. The design this follows uses
+   one identical gradient for both its primary button and its commercial
+   button, so a paid placement is indistinguishable from a product action.
+   That is fine when you have no ad product and fatal when you do — ours
+   sells three formats, so sponsored content needs a colour of its own that
+   nobody can mistake for the site talking.
+   ========================================================================== */
+
+:root {
+  /* Surfaces, lightest to warmest */
+  --cream-50: #fffbf3;
+  --cream-100: #fdf3e0;
+  --cream-200: #f9e8c9;
+
+  /* Ink. Brown, never black — this single choice does most of the work. */
+  --ink: #2b1608;
+  --ink-muted: #2b16089e;
+  --ink-soft: #2b160866;
+  --ink-line: #2b16081f;
+  --ink-line-strong: #2b160833;
+
+  --accent: #ea6c1d;
+  --accent-soft: #f4a93c;
+  --accent-deep: #b8460c;
+  --accent-tint: #ea6c1d24;
+  --accent-wash: #ea6c1d0f;
+
+  --accent-live: #e8543f;
+  --accent-live-deep: #c22b1f;
+  --accent-live-tint: #e8543f24;
+
+  --accent-info: #2f7a41;
+  --accent-info-tint: #4c9b5c24;
+
+  /* Sponsored. Deliberately outside the festival warmth. */
+  --accent-ad: #7d3560;
+  --accent-ad-tint: #7d356017;
+
+  --gradient-accent: linear-gradient(135deg, var(--accent-soft), var(--accent) 60%, var(--accent-deep));
+  --gradient-panel: linear-gradient(145deg, #fffdf8, #fdf3e0);
+
+  /* Every shadow is brown-tinted and pairs an outer drop with an inset
+     white top edge. The inset is what makes a card read as lit from above
+     instead of pasted on; without it these all look flat. */
+  --shadow-card: 0 32px 80px -22px #2b160847, inset 0 1px #fffc;
+  --shadow-panel: 0 16px 40px -14px #140c0447, inset 0 1px #ffffffd9;
+  --shadow-soft: 0 10px 24px -14px #140c044d, inset 0 1px #fffc;
+  --shadow-accent: 0 10px 24px -8px #b8460c73, inset 0 1px #fff3;
+
+  --radius-card: 1.75rem;
+  --radius-control: 0.9rem;
+
+  /* shadcn primitives, re-pointed at the warm palette so dialogs, sheets
+     and popovers inherit it instead of staying neutral grey. */
+  --background: var(--cream-100);
+  --foreground: var(--ink);
+  --card: var(--cream-50);
+  --card-foreground: var(--ink);
+  --popover: var(--cream-50);
+  --popover-foreground: var(--ink);
+  --primary: var(--accent);
+  --primary-foreground: #fff8f0;
+  --secondary: var(--cream-200);
+  --secondary-foreground: var(--ink);
+  --muted: var(--cream-200);
+  --muted-foreground: var(--ink-muted);
+  --accent-foreground: var(--ink);
+  --border: var(--ink-line);
+  --input: var(--ink-line);
+  --ring: var(--accent);
+}
+
+html,
+body {
+  background: var(--cream-100);
+  color: var(--ink);
+}
+
+/* ---- Shell ------------------------------------------------------------- */
+
+/* The aurora is gone. It existed to give a near-black page some depth;
+   on cream it would read as a stain. A flat warm ground plus the panels'
+   own shadows carries the depth now. */
+.aurora-festival,
+.map-experience-shell.is-admin > .absolute.inset-0 {
+  background: var(--cream-100) !important;
+}
+
+.map-experience-shell {
+  --accent-live: #e8543f;
+  --accent-live-soft: var(--accent-live-tint);
+  --accent-live-line: #e8543f4d;
+  --accent-info: #2f7a41;
+  background: var(--cream-100);
+  color: var(--ink);
+}
+
+/* ---- Panels ------------------------------------------------------------ */
+
+/* Was a translucent near-black with a heavy blur. Now warm glass: a
+   near-white cream fill over the map, with the same reduced blur on
+   touch devices — that trade was never about colour, it was about a
+   mid-range phone re-sampling a live WebGL map every frame. */
+.panel-elevated {
+  background-color: #fffdf8e6;
+  backdrop-filter: blur(26px) saturate(160%);
+  -webkit-backdrop-filter: blur(26px) saturate(160%);
+  border: 1px solid #ffffff99;
+  box-shadow: var(--shadow-card);
+  color: var(--ink);
+}
+
+@media (pointer: coarse) {
+  .panel-elevated {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+.navigation-drawer {
+  background: var(--gradient-panel);
+  border-right: 1px solid var(--accent-tint);
+  color: var(--ink);
+}
+
+.detail-card,
+.map-panels-column > .panel-elevated {
+  border-radius: var(--radius-card);
+}
+
+/* ---- Type -------------------------------------------------------------- */
+
+.detail-card-name {
+  color: var(--ink);
+}
+
+.detail-card-meta,
+.detail-card-footnote {
+  color: var(--ink-muted);
+}
+
+.detail-card-link {
+  color: var(--accent-deep);
+  font-weight: 650;
+}
+
+.eyebrow,
+.known-for-eyebrow,
+.ad-rail-kicker {
+  color: var(--accent-deep);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* ---- The card's signature element -------------------------------------- */
+
+.known-for {
+  border-left: 2px solid var(--accent-tint);
+  background: var(--accent-wash);
+}
+
+.known-for-text {
+  color: var(--ink);
+}
+
+.known-for-secondary {
+  border-left-color: var(--ink-line);
+  background: #2b16080a;
+}
+
+.known-for-secondary .known-for-eyebrow {
+  color: var(--ink-soft);
+}
+
+.known-for-toggle {
+  color: var(--accent-deep);
+}
+
+.season-strip {
+  border: 1px solid var(--ink-line);
+  background: #ffffffb3;
+}
+
+.season-strip.is-live {
+  border-color: #e8543f4d;
+  background: linear-gradient(135deg, #e8543f1f, #e8543f0a);
+}
+
+.season-strip-dot {
+  background: var(--ink-soft);
+}
+
+.season-strip.is-live .season-strip-dot {
+  background: var(--accent-live);
+}
+
+.season-strip-state {
+  color: var(--ink-muted);
+}
+
+.season-strip.is-live .season-strip-state {
+  color: var(--accent-live-deep);
+}
+
+.season-strip-timing {
+  color: var(--ink-muted);
+}
+
+/* ---- Controls ---------------------------------------------------------- */
+
+.search-input,
+.field-input {
+  border: 1px solid #2b160824;
+  background: #ffffffb3;
+  color: var(--ink);
+}
+
+.search-input::placeholder {
+  color: var(--ink-soft);
+}
+
+.search-input:focus,
+.field-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-tint);
+}
+
+.menu-trigger {
+  background: #fff9;
+  border: 1px solid var(--ink-line);
+  color: var(--ink);
+}
+
+.menu-trigger:hover {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+/* One shared pill for the top bar's controls, matching the reference's
+   button rhythm: 0.9rem radius, 650 weight, 0.65rem/1.15rem padding. */
+.chip-trigger {
+  border-radius: var(--radius-control);
+  border: 1px solid var(--ink-line);
+  background: #fff9;
+  color: var(--ink);
+  font-weight: 650;
+  padding: 0.65rem 1.15rem;
+}
+
+.chip-trigger:hover {
+  background: #fff;
+  border-color: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.chip-trigger.is-active {
+  background: var(--gradient-accent);
+  border-color: transparent;
+  color: #fff8f0;
+  font-weight: 700;
+  box-shadow: var(--shadow-accent);
+}
+
+.chip-trigger-count {
+  background: #ffffff3d;
+  color: inherit;
+}
+
+.live-toggle {
+  border-radius: var(--radius-control);
+  border: 1px solid #e8543f3d;
+  background: #e8543f14;
+  color: var(--accent-live-deep);
+  font-weight: 650;
+  padding: 0.65rem 1.15rem;
+}
+
+.live-toggle:hover {
+  background: #e8543f24;
+}
+
+.live-toggle.is-active {
+  background: linear-gradient(135deg, var(--accent-live), var(--accent-live-deep));
+  border-color: transparent;
+  color: #fff8f0;
+  font-weight: 700;
+  box-shadow: 0 10px 24px -8px #c22b1f73, inset 0 1px #fff3;
+}
+
+.filter-chip {
+  background: #fff9;
+  border: 1px solid var(--ink-line);
+  color: var(--ink-muted);
+  font-weight: 650;
+  font-size: 0.8125rem;
+  padding: 0.4rem 0.85rem;
+}
+
+.filter-chip:hover {
+  background: #fff;
+  border-color: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.filter-chip.is-active {
+  background: var(--gradient-accent);
+  border-color: transparent;
+  color: #fff8f0;
+  font-weight: 700;
+}
+
+.filter-group-label {
+  color: var(--ink-soft);
+}
+
+.filter-clear {
+  color: var(--accent-deep);
+}
+
+/* Saffron is the product's colour now, so the advertising entry point can
+   no longer borrow it — it gets the plum. */
+.advertise-cta {
+  border: 1px solid #7d356038;
+  background: var(--accent-ad-tint);
+  color: var(--accent-ad);
+  border-radius: var(--radius-control);
+  font-weight: 650;
+}
+
+.advertise-cta:hover {
+  background: #7d356024;
+}
+
+/* ---- Actions ----------------------------------------------------------- */
+
+.detail-card-action-primary {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+  border-radius: var(--radius-control);
+  font-weight: 700;
+  box-shadow: var(--shadow-accent);
+}
+
+.detail-card-action-icon {
+  border: 1px solid var(--ink-line);
+  background: #fff9;
+  color: var(--ink-muted);
+  border-radius: var(--radius-control);
+}
+
+.detail-card-action-icon:hover {
+  background: #fff;
+  color: var(--accent-deep);
+}
+
+.detail-card-action-icon.is-active {
+  border-color: transparent;
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.panel-close-button {
+  color: var(--ink-soft);
+}
+
+.panel-close-button:hover {
+  background: var(--accent-tint) !important;
+  color: var(--accent-deep) !important;
+}
+
+/* ---- Map pins ---------------------------------------------------------- */
+
+/* On a dark map a white pin was the contrast. On a light one the pin has
+   to supply its own: a saffron fill with a white ring, so it reads against
+   both pale roads and dark green parkland. */
+.place-pin {
+  background: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 6px 16px -6px #b8460c8c, 0 0 0 1px var(--accent-tint);
+}
+
+.place-pin-icon {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+}
+
+.place-pin-icon-fallback {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+}
+
+.place-pin-label {
+  color: var(--ink);
+}
+
+.place-pin-selected {
+  background: var(--gradient-accent);
+  box-shadow: 0 10px 24px -8px #b8460c99, 0 0 0 3px #ffffffcc;
+}
+
+.place-pin-selected .place-pin-icon {
+  background: #fff;
+  color: var(--accent-deep);
+}
+
+.place-pin-selected .place-pin-label {
+  color: #fff8f0;
+}
+
+.place-pin-live::after {
+  border-color: var(--accent-live);
+}
+
+/* ---- Sponsored --------------------------------------------------------- */
+
+.sponsored-note {
+  border: 1px solid #7d356038;
+  background: var(--accent-ad-tint);
+}
+
+.sponsored-note-eyebrow {
+  color: var(--accent-ad);
+}
+
+.sponsored-note-name {
+  color: var(--ink);
+}
+
+.sponsored-note-link {
+  color: var(--accent-ad);
+}
+
+.ad-rail {
+  color: var(--ink);
+}
+
+.ad-rail-kicker {
+  color: var(--accent-ad);
+}
+
+/* ---- Results ----------------------------------------------------------- */
+
+.results-row-dot {
+  background: var(--ink-line-strong);
+}
+
+.results-row-dot.is-live {
+  background: var(--accent-live);
+  box-shadow: 0 0 0 3px var(--accent-live-tint);
+}
+
+/* ---- News -------------------------------------------------------------- */
+
+.news-launcher {
+  background: var(--gradient-panel);
+  border: 1px solid var(--accent-tint);
+  color: var(--accent-deep);
+  box-shadow: var(--shadow-soft);
+}
+
+.news-launcher:hover,
+.news-launcher[aria-expanded="true"] {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+}
+
+.live-ticker {
+  background: #fffdf8cc;
+}
+
+.live-ticker-label {
+  color: var(--accent-live-deep) !important;
+}
+
+.live-ticker-headline {
+  color: var(--ink);
+}
+
+.live-ticker-place {
+  color: var(--ink-muted);
+}
+
+.live-ticker-flag-live {
+  background: var(--accent-live-tint);
+  color: var(--accent-live-deep);
+}
+
+.live-ticker-flag {
+  background: var(--accent-info-tint);
+  color: var(--accent-info);
+}
+
+/* ---- Admin ------------------------------------------------------------- */
+
+.admin-label {
+  color: var(--ink-muted);
+}
+
+.admin-input {
+  border: 1px solid #2b160824;
+  background: #ffffffb3;
+  color: var(--ink);
+}
+
+.admin-input::placeholder {
+  color: var(--ink-soft);
+}
+
+.admin-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-tint);
+}
+
+.admin-input option {
+  background: var(--cream-50);
+  color: var(--ink);
+}
+
+.admin-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+}
+
+.admin-coords {
+  background: var(--accent-wash);
+  color: var(--ink-muted);
+}
+
+.admin-coords span {
+  color: var(--ink-soft);
+}
+
+.admin-btn-primary {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+  border-radius: var(--radius-control);
+  font-weight: 700;
+  box-shadow: var(--shadow-accent);
+}
+
+.admin-btn-ghost {
+  color: var(--ink-muted);
+  border-radius: var(--radius-control);
+  font-weight: 650;
+}
+
+.admin-btn-ghost:hover {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.admin-edit-footer,
+.admin-edit-panel {
+  border-top: 1px solid var(--ink-line);
+}
+
+.admin-archived-flag,
+.admin-internal-flag {
+  background: var(--ink-line);
+  color: var(--ink-muted);
+}
+
+.brand-mark {
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-accent);
+}
+
+/* Every card arrives with the same short rise. Cheap, and it is most of
+   what makes the reference feel considered rather than assembled. */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.detail-card,
+.map-panels-column > .panel-elevated {
+  animation: card-in 0.26s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .detail-card,
+  .map-panels-column > .panel-elevated {
+    animation: none;
+  }
+}

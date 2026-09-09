@@ -32,7 +32,7 @@ export default function LiveTicker({ events }: LiveTickerProps) {
 
   return (
     <div className="live-ticker panel-elevated flex min-w-0 items-center overflow-hidden rounded-2xl px-3 py-2">
-      <div className="live-ticker-label flex shrink-0 items-center gap-1.5 pr-3 text-[10px] font-bold tracking-[0.16em] text-rose-300 uppercase">
+      <div className="live-ticker-label flex shrink-0 items-center gap-1.5 pr-3 text-[10px] font-bold tracking-[0.16em] text-[var(--accent-live-deep)] uppercase">
         <span className="live-dot" aria-hidden="true" />
         City broadcast
       </div>

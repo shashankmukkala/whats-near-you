@@ -190,7 +190,7 @@ export default function PlacePandalForm({ coords, onCancel, onCreated }: PlacePa
           <option value="verified">Verified by me</option>
         </select>
 
-        {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+        {error && <p className="mt-2 text-xs text-[#c22b1f]">{error}</p>}
 
         <div className="mt-4 flex justify-end gap-2">
           <button type="button" onClick={onCancel} className="admin-btn-ghost">

@@ -134,7 +134,7 @@ export default function EditPandalDetails({ place, accessToken, onSaved }: Props
       <label className="admin-label mt-3">Tags</label>
       <input value={tagsText} onChange={(e) => setTagsText(e.target.value)} className="admin-input" placeholder="Comma separated" />
 
-      {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
+      {error && <p className="mt-2 text-xs text-[#c22b1f]">{error}</p>}
 
       <div className="mt-4 flex items-center justify-between gap-2">
         <button

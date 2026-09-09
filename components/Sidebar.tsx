@@ -95,7 +95,7 @@ export default function Sidebar({
           </svg>
         </span>
         <div className={`min-w-0 flex-1 overflow-hidden ${SIDEBAR_TRANSITION} ${isCollapsed ? "max-w-0 opacity-0" : "max-w-[160px] opacity-100"}`}>
-          <div className="truncate text-[15px] font-semibold whitespace-nowrap tracking-tight text-neutral-100">
+          <div className="truncate text-[15px] font-semibold whitespace-nowrap tracking-tight text-[var(--ink)]">
             WhatsNearYou
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function Sidebar({
     return (
       <nav className="flex flex-col gap-0.5">
         {navItems.map((item) => {
-          const className = `group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-neutral-400 hover:bg-white/10 hover:text-neutral-100 ${SIDEBAR_TRANSITION}`;
+          const className = `group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-[var(--ink-muted)] hover:bg-[var(--accent-tint)] hover:text-[var(--accent-deep)] ${SIDEBAR_TRANSITION}`;
           const content = (
             <>
               <span className="shrink-0">{item.icon}</span>
@@ -142,8 +142,8 @@ export default function Sidebar({
         })}
 
         {isAdmin && onPlaceBillboard && onPlaceAircraft && onPlaceRail && (
-          <div className="mt-4 border-t border-white/10 pt-3">
-            <div className={`mb-1.5 px-3 text-[10px] font-semibold tracking-[0.16em] text-neutral-500 uppercase ${isCollapsed ? "sr-only" : ""}`}>
+          <div className="mt-4 border-t border-[var(--ink-line)] pt-3">
+            <div className={`mb-1.5 px-3 text-[10px] font-semibold tracking-[0.16em] text-[var(--ink-soft)] uppercase ${isCollapsed ? "sr-only" : ""}`}>
               Place on map
             </div>
             {onPlacePandal && (
@@ -165,7 +165,7 @@ export default function Sidebar({
     const isCollapsed = collapsed && !forceExpanded;
     return (
       <div className="flex justify-center overflow-hidden pt-3">
-        <span className={`text-center text-[10px] whitespace-nowrap text-neutral-400 ${SIDEBAR_TRANSITION} ${isCollapsed ? "max-w-0 opacity-0" : "max-w-[200px] opacity-100"}`}>
+        <span className={`text-center text-[10px] whitespace-nowrap text-[var(--ink-muted)] ${SIDEBAR_TRANSITION} ${isCollapsed ? "max-w-0 opacity-0" : "max-w-[200px] opacity-100"}`}>
           Made with ♥ for Hyderabad
         </span>
       </div>
@@ -177,7 +177,7 @@ export default function Sidebar({
       <button
         onClick={() => setCollapsed((v) => !v)}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-neutral-400 hover:bg-white/10 hover:text-neutral-100"
+        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[var(--ink-muted)] hover:bg-[var(--accent-tint)] hover:text-[var(--accent-deep)]"
       >
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={`h-3.5 w-3.5 transition-transform duration-300 ease-in-out ${collapsed ? "rotate-180" : ""}`}>
           <path d="M12 5l-5 5 5 5" />
@@ -235,7 +235,7 @@ function PlaceButton({
     <button
       onClick={onClick}
       title={collapsed ? label : undefined}
-      className="group flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-neutral-400 transition-colors hover:bg-white/10 hover:text-neutral-100"
+      className="group flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-[var(--ink-muted)] transition-colors hover:bg-[var(--accent-tint)] hover:text-[var(--accent-deep)]"
     >
       <span className="shrink-0" aria-hidden="true">{glyph}</span>
       <span className={`overflow-hidden whitespace-nowrap ${SIDEBAR_TRANSITION} ${collapsed ? "max-w-0 opacity-0" : "max-w-[160px] opacity-100"}`}>

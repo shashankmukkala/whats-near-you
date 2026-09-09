@@ -51,14 +51,14 @@ function AdEnquiriesAdmin() {
   }
 
   return (
-    <div className="min-h-dvh bg-[#0b0b0d] text-neutral-100">
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#0b0b0d]/95 px-5 py-4 backdrop-blur">
+    <div className="min-h-dvh bg-[var(--cream-100)] text-[var(--ink)]">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--ink-line)] bg-[#fffdf8f2] px-5 py-4 backdrop-blur">
         <div>
-          <Link href="/admin" className="text-xs text-neutral-400 hover:underline">
+          <Link href="/admin" className="text-xs text-[var(--ink-muted)] hover:underline">
             ← Back to map
           </Link>
           <h1 className="mt-1 text-lg font-semibold">Ad enquiries</h1>
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-[var(--ink-muted)]">
             {enquiries.filter((e) => e.status === "pending").length} awaiting review
           </p>
         </div>

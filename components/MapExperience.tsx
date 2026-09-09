@@ -599,7 +599,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
       <div className="map-main-shell min-h-0 flex min-w-0 flex-1 flex-col gap-2 overflow-y-auto sm:gap-3 lg:overflow-hidden">
         {isAdmin && (
           <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center pt-2">
-            <div className="rounded-full bg-neutral-900 px-4 py-1 text-xs font-medium tracking-wide text-white uppercase">
+            <div className="rounded-full border border-[var(--ink-line)] bg-[var(--cream-50)] px-4 py-1 text-xs font-semibold tracking-wide text-[var(--ink-muted)] uppercase shadow-sm">
               Admin mode
             </div>
           </div>
@@ -686,7 +686,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
 
             {placingMode && !pendingCoords && (
               <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center">
-                <div className="rounded-full bg-neutral-900/90 px-4 py-2 text-sm text-white shadow-lg">
+                <div className="rounded-full bg-[image:var(--gradient-accent)] px-4 py-2 text-sm font-semibold text-[#fff8f0] shadow-lg">
                   Click anywhere on the map to {placingMode === "pandal" ? "pin a pandal" : "place a billboard"}
                 </div>
               </div>

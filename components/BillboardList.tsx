@@ -41,21 +41,21 @@ export default function BillboardList({ items, onDelete, onClose }: BillboardLis
   return (
     <PanelShell title="Placements" subtitle={`${items.length} published`} onClose={onClose}>
       {items.length === 0 && (
-        <div className="px-3 py-6 text-center text-sm text-neutral-400">
+        <div className="px-3 py-6 text-center text-sm text-[var(--ink-muted)]">
           No placements yet — publish one from the map&apos;s &ldquo;Place on map&rdquo; tools.
         </div>
       )}
       {items.map((item) => {
         const expired = !isCampaignActive(item);
         return (
-          <div key={item.id} className="group flex w-full items-start gap-2 rounded-xl px-2 py-1.5 hover:bg-white/10">
+          <div key={item.id} className="group flex w-full items-start gap-2 rounded-xl px-2 py-1.5 hover:bg-[var(--accent-tint)]">
             <div className="flex min-w-0 flex-1 items-start gap-3 px-1 py-1">
               <span className="text-lg leading-none" aria-hidden="true">
                 {item.ad_type === "aircraft" ? "✈" : item.ad_type === "rail" ? "▦" : "📢"}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium text-neutral-100">{item.name}</span>
-                <span className="block truncate text-xs text-neutral-400">
+                <span className="block truncate text-sm font-medium text-[var(--ink)]">{item.name}</span>
+                <span className="block truncate text-xs text-[var(--ink-muted)]">
                   {AD_TYPE_LABELS[item.ad_type]}
                   {item.ad_type === "rail" && item.slot_number ? ` · slot ${item.slot_number}` : ""}
                   {" · "}
@@ -68,7 +68,7 @@ export default function BillboardList({ items, onDelete, onClose }: BillboardLis
               <button
                 onClick={() => onDelete(item.id)}
                 aria-label={`Delete ${item.name}`}
-                className="mt-1 shrink-0 rounded-full p-1.5 text-neutral-500 opacity-60 transition hover:bg-rose-500/15 hover:text-rose-300 group-hover:opacity-100"
+                className="mt-1 shrink-0 rounded-full p-1.5 text-[var(--ink-soft)] opacity-60 transition hover:bg-[var(--accent-live-tint)] hover:text-[var(--accent-live-deep)] group-hover:opacity-100"
               >
                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth={1.75} className="h-4 w-4">
                   <path d="M5 6h10M8 6V4h4v2M6 6l.5 10h7l.5-10" strokeLinecap="round" strokeLinejoin="round" />
