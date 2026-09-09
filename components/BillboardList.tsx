@@ -6,7 +6,6 @@ import { isCampaignActive } from "@/lib/adFilter";
 
 const AD_TYPE_LABELS: Record<Billboard["ad_type"], string> = {
   rail: "Map rail",
-  billboard: "3D billboard",
   aircraft: "Aircraft banner",
 };
 
@@ -51,7 +50,7 @@ export default function BillboardList({ items, onDelete, onClose }: BillboardLis
           <div key={item.id} className="group flex w-full items-start gap-2 rounded-xl px-2 py-1.5 hover:bg-[var(--accent-tint)]">
             <div className="flex min-w-0 flex-1 items-start gap-3 px-1 py-1">
               <span className="text-lg leading-none" aria-hidden="true">
-                {item.ad_type === "aircraft" ? "✈" : item.ad_type === "rail" ? "▦" : "📢"}
+                {item.ad_type === "aircraft" ? "✈" : "▦"}
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium text-[var(--ink)]">{item.name}</span>

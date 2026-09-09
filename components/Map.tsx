@@ -21,7 +21,7 @@ import {
   TELANGANA_MIN_ZOOM,
 } from "@/lib/mapStyle";
 
-type PlacingMode = "pandal" | "billboard" | "aircraft" | "rail" | null;
+type PlacingMode = "pandal" | "aircraft" | "rail" | null;
 
 type MapProps = {
   placingMode: PlacingMode;

@@ -3,17 +3,15 @@
 import Link from "next/link";
 import { useState } from "react";
 
-type AdFormat = "map_rail" | "billboard" | "aircraft";
+type AdFormat = "map_rail" | "aircraft";
 
 const FORMAT_DETAILS: Record<AdFormat, { label: string; description: string }> = {
   map_rail: { label: "Five-slot map rail", description: "A compact sponsored presence in the centre of the map, on screen the whole time someone is browsing." },
-  billboard: { label: "3D map billboard", description: "A landmark placement that lives at a chosen point on the map." },
   aircraft: { label: "Aircraft banner", description: "A high-attention banner that flies across the map without a location pin." },
 };
 
 const FORMAT_PRICES: Record<AdFormat, { amount: string; duration: string }> = {
   map_rail: { amount: "₹1,000", duration: "for all 5 slots" },
-  billboard: { amount: "₹3,000", duration: "per campaign" },
   aircraft: { amount: "₹3,000", duration: "per campaign" },
 };
 
@@ -54,7 +52,7 @@ export default function AdvertisePage() {
           <h1>Put your brand where Hyderabad is already looking.</h1>
           <p>During Ganesh Chaturthi the whole city is deciding where to go tonight. Reach them on the map while they decide — not after.</p>
           <div className="advertise-proof-list">
-            <div><span>01</span><strong>Choose your format</strong><small>Rail, billboard, or aircraft.</small></div>
+            <div><span>01</span><strong>Choose your format</strong><small>Map rail or aircraft banner.</small></div>
             <div><span>02</span><strong>Send your creative</strong><small>We review every placement.</small></div>
             <div><span>03</span><strong>Go live with confidence</strong><small>Your ad launches after approval.</small></div>
           </div>
@@ -76,7 +74,7 @@ export default function AdvertisePage() {
                 <span className="advertise-step">1 / 2</span>
               </div>
 
-              <label>Ad format<select value={format} onChange={(event) => setFormat(event.target.value as AdFormat)}><option value="map_rail">Five-slot map rail</option><option value="billboard">3D map billboard</option><option value="aircraft">Aircraft banner</option></select></label>
+              <label>Ad format<select value={format} onChange={(event) => setFormat(event.target.value as AdFormat)}><option value="map_rail">Five-slot map rail</option><option value="aircraft">Aircraft banner</option></select></label>
               <div className="advertise-format-note"><div><strong>{FORMAT_DETAILS[format].label}</strong><span>{FORMAT_DETAILS[format].description}</span></div><b>{FORMAT_PRICES[format].amount}<small>{FORMAT_PRICES[format].duration}</small></b></div>
 
               <div className="advertise-field-grid">
@@ -89,7 +87,6 @@ export default function AdvertisePage() {
                 <label>Destination URL<input name="target_url" type="url" placeholder="https://yourbrand.com" /></label>
               </div>
 
-              {format === "billboard" && <div className="advertise-inline-note">Billboards are placed at an agreed map location after review. Our team will confirm dimensions and orientation with you.</div>}
               {format === "aircraft" && <div className="advertise-inline-note">Aircraft banners move across the map and do not require a pin or fixed location.</div>}
 
               <div className="advertise-field-grid"><label>Start date<input name="campaign_start" type="date" /></label><label>End date<input name="campaign_end" type="date" /></label></div>

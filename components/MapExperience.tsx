@@ -5,11 +5,9 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import MapView from "@/components/Map";
 import PlaceMarkers from "@/components/PlaceMarkers";
 import PendingMarker from "@/components/PendingMarker";
-import BillboardLayer from "@/components/BillboardLayer";
-import BillboardMarkers from "@/components/BillboardMarkers";
 import AircraftAdOverlay from "@/components/AircraftAdOverlay";
 import PlacePandalForm from "@/components/PlacePandalForm";
-import PlaceBillboardForm from "@/components/PlaceBillboardForm";
+import PlaceAircraftForm from "@/components/PlaceAircraftForm";
 import PlaceRailAdForm from "@/components/PlaceRailAdForm";
 import PlaceEventForm from "@/components/PlaceEventForm";
 import TopBar from "@/components/TopBar";
@@ -29,7 +27,7 @@ import { deriveAreas, deriveTags } from "@/lib/vocabulary";
 import { activeBillboards } from "@/lib/adFilter";
 import type { AdminPlace, Billboard, CityEvent, Place } from "@/lib/supabase";
 
-type PlacingMode = "pandal" | "billboard" | "aircraft" | "rail" | null;
+type PlacingMode = "pandal" | "aircraft" | "rail" | null;
 type Selected = { kind: "place"; item: Place } | { kind: "billboard"; item: Billboard } | null;
 
 type MapExperienceProps = {
@@ -588,7 +586,6 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
           isAdmin={isAdmin}
           publicMode={!isAdmin}
           onPlacePandal={() => toggleMode("pandal")}
-          onPlaceBillboard={() => toggleMode("billboard")}
           onPlaceAircraft={startAircraftPlacement}
           onPlaceRail={() => toggleMode("rail")}
           mobileOpen={mobileNavOpen}
@@ -664,18 +661,11 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
               selectedId={selected?.kind === "place" ? selected.item.id : null}
               onSelect={selectPlace}
             />
-            <BillboardMarkers
-              map={map}
-              billboards={liveBillboards}
-              selectedId={selected?.kind === "billboard" ? selected.item.id : null}
-              onSelect={selectBillboard}
-            />
             <AircraftAdOverlay
               billboards={liveBillboards}
               selectedId={selected?.kind === "billboard" ? selected.item.id : null}
               onSelect={selectBillboard}
             />
-            <BillboardLayer map={map} billboards={liveBillboards} />
             {isAdmin && placingMode !== "aircraft" && (
               <PendingMarker map={map} coords={pendingCoords} onDragEnd={setPendingCoords} />
             )}
@@ -687,7 +677,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
             {placingMode && !pendingCoords && (
               <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center">
                 <div className="rounded-full bg-[image:var(--gradient-accent)] px-4 py-2 text-sm font-semibold text-[#fff8f0] shadow-lg">
-                  Click anywhere on the map to {placingMode === "pandal" ? "pin a pandal" : "place a billboard"}
+                  Click anywhere on the map to pin a pandal
                 </div>
               </div>
             )}
@@ -719,10 +709,9 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
               />
             )}
 
-            {isAdmin && pendingCoords && (placingMode === "billboard" || placingMode === "aircraft") && (
-              <PlaceBillboardForm
+            {isAdmin && pendingCoords && placingMode === "aircraft" && (
+              <PlaceAircraftForm
                 coords={pendingCoords}
-                initialAdType={placingMode === "aircraft" ? "aircraft" : "billboard"}
                 onCancel={cancelPlacement}
                 onCreated={(billboard) => {
                   setBillboards((prev) => [billboard, ...prev]);

@@ -1,0 +1,13 @@
+# Keep LF in the working tree on every platform.
+#
+# Git's autocrlf rewrote these files to CRLF on checkout, which silently
+# broke every multi-line search-and-replace run against them — the text on
+# screen matched, the bytes did not. Pinning the line ending removes a
+# whole class of "the file looks identical but the tool cannot find it".
+* text=auto eol=lf
+
+# Binary — never touch.
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff2 binary

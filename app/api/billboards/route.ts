@@ -14,7 +14,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { name, ad_type, slot_number, image_url, target_url, campaign_end, lng, lat, elevation_m, width_m, height_m, heading_deg } = body;
+  const { name, ad_type, slot_number, image_url, target_url, campaign_end, lng, lat } = body;
 
   if (!name || typeof lng !== "number" || typeof lat !== "number") {
     return NextResponse.json({ error: "name, lng, and lat are required" }, { status: 400 });
@@ -34,17 +34,15 @@ export async function POST(request: NextRequest) {
     .from("billboards")
     .insert({
       name,
-      ad_type: ad_type === "aircraft" ? "aircraft" : ad_type === "rail" ? "rail" : "billboard",
+      // Two formats only (migration 0006). Anything unrecognised falls to
+      // aircraft rather than being trusted through to the CHECK constraint.
+      ad_type: ad_type === "rail" ? "rail" : "aircraft",
       slot_number: ad_type === "rail" && Number.isInteger(slot_number) && slot_number >= 1 && slot_number <= 5 ? slot_number : null,
       image_url: image_url ?? null,
       target_url: target_url ?? null,
       campaign_end: campaign_end || null,
       lng,
       lat,
-      elevation_m: elevation_m ?? 0,
-      width_m: width_m ?? 10,
-      height_m: height_m ?? 5,
-      heading_deg: heading_deg ?? 0,
     })
     .select()
     .single();

@@ -3,7 +3,7 @@
 export type AdEnquiry = {
   id: string;
   brand_name: string;
-  ad_format: "map_rail" | "billboard" | "aircraft";
+  ad_format: "map_rail" | "aircraft";
   contact_name: string;
   contact: string;
   image_url: string | null;

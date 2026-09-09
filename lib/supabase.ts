@@ -105,7 +105,14 @@ export function createServiceRoleClient(): SupabaseClient {
 export type Billboard = {
   id: string;
   name: string;
-  ad_type: "billboard" | "aircraft" | "rail";
+  /**
+   * Two formats. The 3D billboard was retired in migration 0006 — it was a
+   * three.js panel placed at a coordinate, and the map opens flat, where a
+   * 3D panel is just a flat rectangle with none of the presence it was
+   * sold for. The aircraft banner was always a DOM overlay for that same
+   * reason.
+   */
+  ad_type: "aircraft" | "rail";
   slot_number: number | null;
   image_url: string | null;
   target_url: string | null;
@@ -114,12 +121,9 @@ export type Billboard = {
    *  drops a placement once this date has passed (see lib/adFilter.ts).
    *  Null means "no end date on file", which renders indefinitely. */
   campaign_end: string | null;
+  /** Where an aircraft banner enters the map. Unused by a rail slot. */
   lng: number;
   lat: number;
-  elevation_m: number;
-  width_m: number;
-  height_m: number;
-  heading_deg: number;
   advertiser_id: string | null;
   created_at: string;
 };
