@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import LocationPicker from "@/components/LocationPicker";
+import PhotoUpload from "@/components/PhotoUpload";
 
 export default function SubmitPage() {
   const [name, setName] = useState("");
@@ -147,25 +148,18 @@ export default function SubmitPage() {
             />
           </div>
 
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="admin-label">Photo link</label>
-              <input
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="field-input mt-1.5"
-                placeholder="https://…"
-              />
-            </div>
-            <div>
-              <label className="admin-label">Instagram / reel</label>
-              <input
-                value={mediaUrl}
-                onChange={(e) => setMediaUrl(e.target.value)}
-                className="field-input mt-1.5"
-                placeholder="https://instagram.com/…"
-              />
-            </div>
+          <div className="mt-6">
+            <PhotoUpload value={imageUrl} onChange={setImageUrl} label="Photo of the pandal" />
+          </div>
+
+          <div className="mt-4">
+            <label className="admin-label">Instagram / reel link</label>
+            <input
+              value={mediaUrl}
+              onChange={(e) => setMediaUrl(e.target.value)}
+              className="field-input mt-1.5"
+              placeholder="https://instagram.com/…"
+            />
           </div>
 
           <div className="mt-8 rounded-[1.25rem] border border-[var(--ink-line)] bg-[#ffffff80] p-5">

@@ -27,6 +27,13 @@ const ADVERTISE_ICON = (
   </svg>
 );
 
+const SUBMISSIONS_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+    <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" />
+    <path d="M12 7v6M9 10h6" />
+  </svg>
+);
+
 const ENQUIRIES_ICON = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
     <path d="M4 6h16v12H4zM4 7l8 6 8-6" />
@@ -73,6 +80,7 @@ export default function Sidebar({
     ? [
         { label: "Preview", icon: EXPLORE_ICON, action: "explore" },
         { label: "News", icon: NEWS_ICON, action: "news" },
+        { label: "Submissions", icon: SUBMISSIONS_ICON, href: "/admin/submissions" },
         { label: "Ad enquiries", icon: ENQUIRIES_ICON, href: "/admin/ad-enquiries" },
         { label: "Billboards", icon: ADVERTISE_ICON, href: "/admin/billboards" },
       ]

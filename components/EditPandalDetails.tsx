@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { AdminPlace, Place } from "@/lib/supabase";
 import { fromIstDateInput, toIstDateInput } from "@/lib/season";
+import PhotoUpload from "@/components/PhotoUpload";
 
 type Props = {
   place: Place;
@@ -124,12 +125,12 @@ export default function EditPandalDetails({ place, accessToken, onSaved }: Props
       <label className="admin-label mt-3">Photo / video / reel link</label>
       <input value={mediaUrl} onChange={(e) => setMediaUrl(e.target.value)} className="admin-input" />
 
-      {/* A Supabase Storage public URL, not an uploaded data: URL. The
-          project this is adapted from stored photos base64-encoded inside
-          the row and returned every one of them on every page load — fine
-          at five photos, not at eighty-five. */}
-      <label className="admin-label mt-3">Photo URL (Supabase Storage)</label>
-      <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} className="admin-input" placeholder="https://…/storage/v1/object/public/…" />
+      {/* Uploads to Supabase Storage and stores the URL — never a base64
+          data URL inside the row. The project this is adapted from did the
+          latter and returned every photo on every page load. */}
+      <div className="mt-3">
+        <PhotoUpload value={imageUrl} onChange={setImageUrl} label="Photo" />
+      </div>
 
       <label className="admin-label mt-3">Tags</label>
       <input value={tagsText} onChange={(e) => setTagsText(e.target.value)} className="admin-input" placeholder="Comma separated" />

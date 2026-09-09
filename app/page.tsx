@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import SiteHeader from "@/components/SiteHeader";
+import HeroArt from "@/components/HeroArt";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { isCurrent, isLiveNow, SEASON_ENDS_AT, SEASON_STARTS_AT } from "@/lib/season";
 import type { Place } from "@/lib/supabase";
@@ -72,18 +73,21 @@ export default async function Home({
               "radial-gradient(circle at 12% 0%, rgba(244,169,60,0.34), transparent 45%), radial-gradient(circle at 90% 12%, rgba(232,84,63,0.20), transparent 42%)",
           }}
         />
-        <div className="relative mx-auto max-w-6xl px-4 py-16 text-center sm:px-6 sm:py-24">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
+          <HeroArt className="order-first mx-auto w-full max-w-sm lg:order-last lg:max-w-none" />
+
+          <div className="text-center lg:text-left">
           <span className="section-eyebrow">Ganesh Chaturthi {new Date(SEASON_STARTS_AT).getFullYear()}</span>
-          <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-extrabold leading-[1.05] tracking-tight text-[var(--ink)] sm:text-6xl">
+          <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-[var(--ink)] sm:text-6xl">
             Every pandal in the city,
             <br className="hidden sm:block" /> on one map.
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[var(--ink-muted)] sm:text-lg">
+          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[var(--ink-muted)] sm:text-lg lg:mx-0">
             Find the Ganesh pandals near you, see which ones are open right now, and get directions
             straight there. {dateLabel(SEASON_STARTS_AT)} to {dateLabel(SEASON_ENDS_AT)}.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
             <Link href="/map" className="btn-primary">
               See the map
             </Link>
@@ -93,7 +97,7 @@ export default async function Home({
           </div>
 
           {/* Real numbers, read from the database on every request. */}
-          <dl className="mx-auto mt-12 grid max-w-lg grid-cols-3 gap-3">
+          <dl className="mx-auto mt-10 grid max-w-lg grid-cols-3 gap-3 lg:mx-0">
             {[
               { value: stats.total, label: stats.total === 1 ? "pandal" : "pandals" },
               { value: stats.areas, label: stats.areas === 1 ? "area" : "areas" },
@@ -107,6 +111,7 @@ export default async function Home({
               </div>
             ))}
           </dl>
+          </div>
         </div>
       </section>
 
