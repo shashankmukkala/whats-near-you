@@ -3893,3 +3893,511 @@ body {
     animation: none;
   }
 }
+
+/* ==========================================================================
+   WARM LIGHT THEME — PASS 2: the compound selectors
+   --------------------------------------------------------------------------
+   The first pass relit `.panel-elevated` and lost, because the inherited
+   sheet also carries `.is-public .panel-elevated` — specificity (0,2,0)
+   against (0,1,0). Source order is irrelevant when specificity differs, so
+   every floating surface kept its near-black fill while the newer button,
+   pin and card-internal styles landed on top of it. The result was brown
+   text on charcoal glass: worse than either theme on its own.
+
+   The lesson, written down because it will happen again: when relighting an
+   inherited stylesheet, grep for the compound selectors FIRST. Overriding
+   the base class and assuming it wins is how you ship a half-inverted UI.
+
+   Everything below matches or exceeds the specificity of the rule it
+   replaces, and uses !important only where the original does.
+   ========================================================================== */
+
+/* ---- Floating surfaces ------------------------------------------------- */
+
+.is-public .panel-elevated,
+.is-admin .panel-elevated {
+  border-color: #ffffff99;
+  background-color: #fffdf8e6;
+  box-shadow: var(--shadow-card);
+}
+
+.is-public .topbar-shell,
+.is-admin .topbar-shell {
+  border: 1px solid #ffffffb3;
+  background: #fffdf8e6;
+  box-shadow: var(--shadow-panel);
+}
+
+.is-public .map-panels-column > .panel-elevated {
+  color: var(--ink);
+}
+
+/* ---- The ad rail ------------------------------------------------------- */
+
+/* Plum, not saffron: the rail is paid inventory sitting directly beside
+   the product's own saffron controls, and the whole point of giving
+   advertising its own colour is that a visitor can tell them apart. */
+.ad-rail {
+  border: 1px solid #7d356024;
+  background: #fffdf8f2;
+  box-shadow: 0 22px 52px -20px #2b160840, inset 0 1px #fffc;
+}
+
+.ad-rail-header strong,
+.ad-rail-slot-copy strong {
+  color: var(--ink);
+}
+
+.ad-rail-slot-copy small,
+.ad-rail-footer {
+  color: var(--ink-muted);
+}
+
+.ad-rail-slot-filled {
+  border: 1px solid #7d356024;
+  background: linear-gradient(145deg, #7d35600f, #ffffff80);
+}
+
+.ad-rail-slot-empty {
+  border: 1px dashed #7d356038;
+  color: var(--accent-ad);
+  background: #7d35600a;
+}
+
+.ad-rail-slot-image {
+  background: var(--accent-ad);
+  color: #fff8f0;
+}
+
+.ad-rail-empty-plus,
+.ad-rail-arrow,
+.ad-rail-footer strong,
+.ad-rail-footer span {
+  color: var(--accent-ad);
+}
+
+.ad-rail-collapse,
+.ad-rail-reopen {
+  border: 1px solid var(--ink-line);
+  background: #fffdf8f2;
+  color: var(--ink-muted);
+}
+
+.ad-rail-reopen span:first-child {
+  background: var(--accent-ad);
+  color: #fff8f0;
+}
+
+.ad-rail-full-notice {
+  border: 1px solid #7d356038;
+  background: var(--accent-ad-tint);
+  color: var(--accent-ad);
+}
+
+/* ---- News tab and ticker ----------------------------------------------- */
+
+.news-launcher {
+  border: 1px solid #e8543f3d;
+  border-right: 0;
+  background: #fffdf8f2;
+  color: var(--accent-live-deep);
+  box-shadow: var(--shadow-soft);
+}
+
+.news-launcher:hover,
+.news-launcher[aria-expanded="true"] {
+  background: linear-gradient(135deg, var(--accent-live), var(--accent-live-deep));
+  color: #fff8f0;
+}
+
+.topbar-broadcast .live-ticker {
+  border: 1px solid var(--ink-line);
+  background: #ffffff8c;
+}
+
+/* ---- Map controls ------------------------------------------------------ */
+
+/* These float directly on the tiles, so they need real contrast against a
+   pale basemap — a translucent white control over a white road is a
+   control nobody can find. */
+.map-control-orb,
+.map-rotation-pad,
+.map-action-button,
+.map-add-button {
+  border: 1px solid var(--ink-line);
+  background: #fffdf8f2;
+  color: var(--ink);
+  box-shadow: var(--shadow-soft);
+}
+
+.map-control-orb:hover,
+.map-control-orb-open,
+.map-action-button:hover,
+.map-rotation-pad button:hover {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.maplibregl-ctrl-group {
+  background: #fffdf8f2 !important;
+  border: 1px solid var(--ink-line) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+.maplibregl-ctrl-group button {
+  color: var(--ink) !important;
+}
+
+.maplibregl-ctrl-group button:hover {
+  background: var(--accent-tint) !important;
+}
+
+.billboard-compass {
+  background: #fffdf8f2;
+  border: 1px solid var(--ink-line);
+  color: var(--ink);
+}
+
+/* ---- Sponsored pin ----------------------------------------------------- */
+
+.billboard-pin {
+  background: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 6px 16px -6px #7d356073, 0 0 0 1px #7d356024;
+}
+
+.billboard-pin-icon {
+  background: var(--accent-ad);
+  color: #fff8f0;
+}
+
+.billboard-pin-label {
+  color: var(--ink);
+}
+
+.billboard-pin-selected {
+  background: var(--accent-ad);
+}
+
+.billboard-pin-selected .billboard-pin-label {
+  color: #fff8f0;
+}
+
+/* ---- Navigation drawer ------------------------------------------------- */
+
+.nav-item-active {
+  background: linear-gradient(100deg, var(--accent-tint), var(--accent-wash)) !important;
+  color: var(--accent-deep) !important;
+}
+
+.nav-item-icon-active {
+  color: var(--accent-deep);
+}
+
+.is-public .map-sidebar-rail .brand-mark,
+.navigation-drawer .brand-mark {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+}
+
+.navigation-drawer button:hover,
+.is-public .map-sidebar-rail button:hover {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+/* ---- Leftovers from the mint era --------------------------------------- */
+
+/* These were the trust colour on a dark card. Mint on cream is weak and,
+   worse, it no longer means anything here — saffron is the product's
+   voice and green is reserved for confirmation. */
+.detail-card-link {
+  color: var(--accent-deep);
+}
+
+.detail-card-action-static {
+  background: var(--accent-ad-tint);
+  color: var(--accent-ad);
+}
+
+.detail-card-action-icon.is-active {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.detail-card-action-badge {
+  background: var(--accent);
+  color: #fff8f0;
+}
+
+.detail-card-tag {
+  border: 1px solid var(--ink-line);
+  background: #ffffffb3;
+  color: var(--ink-muted);
+}
+
+/* ---- /advertise -------------------------------------------------------- */
+
+/* An entire page still in the dark theme, and the one page whose whole job
+   is to look worth paying for. */
+.advertise-page {
+  background: var(--cream-100);
+  color: var(--ink);
+}
+
+.advertise-glow-one {
+  background: var(--accent-soft);
+  opacity: 0.28;
+}
+
+.advertise-glow-two {
+  background: var(--accent-ad);
+  opacity: 0.14;
+}
+
+.advertise-back {
+  color: var(--ink-muted);
+}
+
+.advertise-back:hover {
+  color: var(--accent-deep);
+}
+
+.advertise-brand {
+  color: var(--ink);
+}
+
+.advertise-brand span {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+}
+
+.advertise-intro h1 {
+  color: var(--ink);
+}
+
+.advertise-intro > p,
+.advertise-proof-list small,
+.advertise-footnote,
+.advertise-step {
+  color: var(--ink-muted);
+}
+
+.advertise-proof-list > div {
+  border: 1px solid var(--ink-line);
+  background: #ffffffb3;
+}
+
+.advertise-proof-list span {
+  color: var(--accent-deep);
+}
+
+.advertise-proof-list strong,
+.advertise-form-card h2,
+.advertise-payment-body strong {
+  color: var(--ink);
+}
+
+.advertise-form-card {
+  border: 1px solid var(--accent-tint);
+  background: var(--gradient-panel);
+  box-shadow: var(--shadow-card);
+}
+
+.advertise-form-card label {
+  color: var(--ink-muted);
+}
+
+.advertise-form-card input:not([type="checkbox"]),
+.advertise-form-card select,
+.advertise-form-card textarea {
+  border: 1px solid #2b160824;
+  background: #ffffffb3;
+  color: var(--ink);
+}
+
+.advertise-form-card select option {
+  background: var(--cream-50);
+  color: var(--ink);
+}
+
+.advertise-form-card input:focus,
+.advertise-form-card select:focus,
+.advertise-form-card textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-tint);
+}
+
+.advertise-format-note,
+.advertise-inline-note {
+  border: 1px solid var(--accent-tint);
+  background: var(--accent-wash);
+}
+
+.advertise-format-note > b {
+  color: var(--accent-deep);
+}
+
+.advertise-format-note span,
+.advertise-inline-note,
+.advertise-payment-body p,
+.advertise-success p {
+  color: var(--ink-muted);
+}
+
+.advertise-check {
+  color: var(--ink-muted) !important;
+}
+
+.advertise-check input {
+  accent-color: var(--accent);
+}
+
+.advertise-payment {
+  border: 1px solid var(--accent-tint);
+  background: linear-gradient(145deg, #ea6c1d14, #7d356008);
+}
+
+.advertise-payment-heading h3 {
+  color: var(--ink);
+}
+
+.advertise-payment-badge {
+  border: 1px solid var(--accent-tint);
+  background: var(--accent-wash);
+  color: var(--accent-deep);
+}
+
+.advertise-qr-placeholder {
+  border: 1px dashed var(--ink-line-strong);
+  background: #ffffffb3;
+  color: var(--ink-muted);
+}
+
+.advertise-payment-body code {
+  color: var(--accent-deep);
+}
+
+.advertise-success h2 {
+  color: var(--ink);
+}
+
+.ad-enquiry-primary {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+  box-shadow: var(--shadow-accent);
+}
+
+/* ---- Admin surfaces ---------------------------------------------------- */
+
+.admin-enquiries-panel,
+.admin-enquiry-item {
+  border: 1px solid var(--ink-line);
+  background: #ffffffb3;
+}
+
+.admin-enquiries-header h2,
+.admin-enquiry-item h3 {
+  color: var(--ink);
+}
+
+.admin-enquiries-header p,
+.admin-enquiry-meta,
+.admin-enquiry-message,
+.admin-enquiries-empty {
+  color: var(--ink-muted);
+}
+
+.admin-enquiry-format {
+  color: var(--accent-ad);
+}
+
+.status-pending {
+  background: var(--accent-wash);
+  color: var(--accent-deep);
+}
+
+.status-approved {
+  background: var(--accent-info-tint);
+  color: var(--accent-info);
+}
+
+.status-rejected {
+  background: var(--accent-live-tint);
+  color: var(--accent-live-deep);
+}
+
+.admin-enquiry-links a {
+  border: 1px solid var(--ink-line);
+  color: var(--accent-deep);
+}
+
+.admin-enquiry-approve {
+  background: var(--gradient-accent);
+  color: #fff8f0;
+}
+
+.admin-enquiry-reject {
+  border: 1px solid #e8543f3d;
+  color: var(--accent-live-deep);
+}
+
+.rail-slot-picker {
+  border: 1px solid #7d356024;
+  background: #7d35600a;
+}
+
+.rail-slot-options button {
+  border: 1px solid var(--ink-line);
+  background: #ffffffb3;
+  color: var(--ink-muted);
+}
+
+.rail-slot-options button.selected {
+  border-color: var(--accent-ad);
+  background: var(--accent-ad-tint);
+  color: var(--accent-ad);
+  box-shadow: 0 0 0 2px #7d356014;
+}
+
+.rail-form-label {
+  color: var(--ink-muted);
+}
+
+/* The enquiry modal — the last dark surface a visitor can reach. */
+.ad-enquiry-backdrop {
+  background: #2b160859;
+}
+
+.ad-enquiry-modal {
+  border: 1px solid var(--accent-tint);
+  background: var(--gradient-panel);
+  color: var(--ink);
+  box-shadow: var(--shadow-card);
+}
+
+.ad-enquiry-modal input,
+.ad-enquiry-modal textarea {
+  border: 1px solid #2b160824;
+  background: #ffffffb3;
+  color: var(--ink);
+}
+
+.ad-enquiry-modal input::placeholder,
+.ad-enquiry-modal textarea::placeholder {
+  color: var(--ink-soft);
+}
+
+.ad-enquiry-close:hover {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.ad-enquiry-success-icon {
+  background: var(--accent-info-tint);
+  color: var(--accent-info);
+}
+
+/* The aircraft banner and its admin preview keep their own dark palette on
+   purpose: it is an advertiser's creative being towed across the sky, not
+   a surface of ours, and a cream banner on a cream map would vanish. */
