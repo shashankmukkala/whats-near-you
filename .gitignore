@@ -50,3 +50,4 @@ next-env.d.ts
 
 # one-off local backups from data migration scripts
 scripts/*.bak
+.shots/

@@ -66,16 +66,20 @@ export const metadata: Metadata = {
 // THEME.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={cn("h-full", "antialiased", geistMono.variable, "font-sans", sans.variable)}
-    >
-      {/* Not overflow-hidden here — that would block normal page scroll
-          on every non-map route (/advertise, /admin/ad-enquiries). The
-          map experience contains its own scroll via
-          map-experience-shell's h-dvh + overflow-hidden, so the body does
-          not need to clip as well. */}
-      <body className="h-full">
+    <html lang="en" className={cn("antialiased", geistMono.variable, "font-sans", sans.variable)}>
+      {/* No h-full on either element, and this matters more than it looks.
+          `height: 100%` pins the document to exactly the viewport, so a
+          page taller than one screen renders its overflow but the window
+          has nothing to scroll: the landing page showed its hero and
+          nothing else, with the rest present in the DOM and unreachable.
+          Measured as documentElement.scrollHeight 900 against
+          body.scrollHeight 1745.
+
+          It was inherited from a build where every route was the map. The
+          map still does not need it — map-experience-shell carries its own
+          h-dvh and overflow-hidden — so nothing is lost by letting the
+          document size to its content the way a document should. */}
+      <body>
         <TooltipProvider delay={200}>{children}</TooltipProvider>
       </body>
     </html>

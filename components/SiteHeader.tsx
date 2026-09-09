@@ -25,9 +25,11 @@ export default function SiteHeader({ active }: { active?: "map" | "submit" | "ad
           <Link href="/advertise" className={active === "advertise" ? "btn-secondary" : "btn-ghost"}>
             Publish ads
           </Link>
-          <Link href="/submit" className={active === "submit" ? "btn-secondary" : "btn-ghost hidden sm:inline-flex"}>
-            Add a pandal
-          </Link>
+          <span className={active === "submit" ? "contents" : "hidden sm:contents"}>
+            <Link href="/submit" className={active === "submit" ? "btn-secondary" : "btn-ghost"}>
+              Add a pandal
+            </Link>
+          </span>
           <Link href="/map" className="btn-primary">
             View map
           </Link>

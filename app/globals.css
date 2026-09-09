@@ -50,14 +50,20 @@
 
 html,
 body {
-  height: 100%;
-  /* Dark is the only theme (see app/layout.tsx) — without this, native
-     controls (date/time picker icons, scrollbars, checkboxes) render
-     using the browser's light-mode chrome by default, which on a dark
-     background means a near-invisible dark-on-dark calendar icon inside
-     <input type="datetime-local">/<input type="date"> — it's there, just
-     impossible to see or click. */
-  color-scheme: dark;
+  /* No height: 100% here.
+     It pins the document to exactly the viewport, so any page taller than
+     one screen paints its overflow with nothing to scroll — the landing
+     page rendered its hero and left everything below it in the DOM and
+     unreachable (documentElement.scrollHeight 900 vs body.scrollHeight
+     1745). Harmless while every route was the map, which manages its own
+     height; wrong the moment a real document exists. */
+
+  /* Light is the only theme (see app/layout.tsx). This has to track it:
+     it tells the browser which chrome to draw native controls in, so the
+     wrong value gives a cream page dark scrollbars and a near-invisible
+     dark-on-dark calendar icon inside <input type="date"> — present, just
+     impossible to see. It was "dark" until the inversion. */
+  color-scheme: light;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
@@ -2884,7 +2890,7 @@ body {
    once — the reference had four near-identical inline copies, which is how
    one of them ended up a different colour from the others. */
 .chip-trigger {
-  display: flex;
+  display: inline-flex;
   min-height: 40px;
   align-items: center;
   gap: 6px;
@@ -2986,7 +2992,7 @@ body {
 }
 
 .filter-chip {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
   border-radius: 9999px;
@@ -4561,4 +4567,123 @@ body {
 
 .picker-pin:active {
   cursor: grabbing;
+}
+
+/* ==========================================================================
+   PASS 3: background-IMAGE, not background-colour
+   --------------------------------------------------------------------------
+   The card still rendered dark on a phone while its computed
+   background-color read cream, which is exactly as confusing as it sounds.
+   The cause: `.is-public .detail-card` sets the `background` SHORTHAND to a
+   dark gradient, and a background-image always paints on top of a
+   background-colour. Overriding the colour alone changed a value nobody
+   could see.
+
+   So these reset background-image explicitly. Checking computed
+   backgroundColor is not enough to prove a surface is light — scripts/
+   check-contrast.mjs now walks backgroundImage too.
+   ========================================================================== */
+
+.is-public .detail-card,
+.is-admin .detail-card {
+  border-color: var(--accent-tint);
+  background-image: none;
+  background-color: #fffdf8e6;
+  box-shadow: var(--shadow-card);
+}
+
+.navigation-drawer {
+  border: 1px solid var(--accent-tint) !important;
+  background-image: none;
+  background-color: #fffdf8f2;
+  color: var(--ink);
+  box-shadow: 24px 0 70px -30px #2b160840, inset 0 1px #fffc;
+}
+
+/* Same shorthand trap, same fix. */
+.ad-enquiry-modal,
+.advertise-form-card {
+  background-image: none;
+}
+
+.aircraft-preview,
+.aircraft-preview-stage {
+  background-image: none;
+  background-color: var(--cream-200);
+}
+
+/* The top bar was 160px tall on a 390px phone — three wrapped rows, over a
+   quarter of the screen, on the one surface whose whole job is showing the
+   map. The controls are sized for a mouse; on a phone they need to be
+   sized for the space instead.
+   Height is what is being fixed here, NOT tap area: the 44px minimum still
+   holds via min-height, so the buttons stay as easy to hit while taking
+   less room. */
+@media (max-width: 639px) {
+  /* This bar is a GRID on mobile, not a flex row — set that way further
+     up the sheet, back when it held three controls. Adding a fourth (Live
+     now) auto-placed it onto an implicit third row, giving a 150px bar:
+     over a quarter of a 390px screen, on the surface whose entire job is
+     showing the map.
+     Flex properties are inert here, so this places all four explicitly on
+     one row instead. Only the search box is allowed to shrink
+     (minmax(0, 1fr)), so the bar resolves the same way at every width
+     rather than depending on how free space happens to divide. */
+  .topbar-shell {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 5px;
+    padding: 6px 7px;
+  }
+
+  .topbar-shell > .menu-trigger {
+    grid-area: 1 / 1;
+  }
+
+  .topbar-shell > .topbar-search {
+    grid-area: 1 / 2;
+    width: auto;
+    min-width: 0;
+  }
+
+  .topbar-shell > .live-toggle {
+    grid-area: 1 / 3;
+  }
+
+  /* Overrides the earlier rule that spanned Filters across a second row. */
+  .topbar-shell > .topbar-filters {
+    grid-area: 1 / 4;
+  }
+
+  .topbar-shell > .topbar-filters > button {
+    width: auto;
+  }
+
+  /* Empty on mobile — the actions it held moved out. Left in the DOM it
+     would still claim a grid track. */
+  .topbar-shell > .topbar-account {
+    display: none;
+  }
+
+  .search-input {
+    padding-block: 0.6rem;
+  }
+
+  .chip-trigger,
+  .live-toggle {
+    min-height: 42px;
+    padding: 0.5rem 0.7rem;
+    font-size: 13px;
+    gap: 5px;
+  }
+
+  .menu-trigger {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* The ticker is a second full-width row on its own. It is supporting
+     content, and it was pushing the real controls down the screen. */
+  .topbar-broadcast {
+    display: none;
+  }
 }

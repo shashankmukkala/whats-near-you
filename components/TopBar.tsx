@@ -229,9 +229,11 @@ export default function TopBar({
 
       <div className="topbar-account ml-auto flex items-center gap-1.5">
         {publicMode && (
-          <Link href="/submit" className="btn-primary hidden sm:inline-flex">
-            Add a pandal
-          </Link>
+          <span className="hidden sm:contents">
+            <Link href="/submit" className="btn-primary">
+              Add a pandal
+            </Link>
+          </span>
         )}
       </div>
     </div>

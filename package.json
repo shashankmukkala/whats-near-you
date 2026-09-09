@@ -11,7 +11,9 @@
     "verify:db": "node --env-file=.env.local scripts/verify-database.mjs",
     "parse:sheet": "node scripts/parse-sheet.mjs \"Ganesh Pandals - Sheet2.csv\"",
     "seed": "node --env-file=.env.local scripts/seed-pandals.mjs",
-    "seed:write": "node --env-file=.env.local scripts/seed-pandals.mjs --write"
+    "seed:write": "node --env-file=.env.local scripts/seed-pandals.mjs --write",
+    "shots": "node scripts/shots.mjs",
+    "check:contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -34,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.3",
+    "playwright": "^1.63.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
