@@ -18,7 +18,7 @@ function formatDate(iso: string) {
 export default function AdRail({ billboards, onSelect }: AdRailProps) {
   const [collapsed, setCollapsed] = useState(false);
   const router = useRouter();
-  const activeAds = billboards.filter((billboard) => billboard.ad_type === "rail").sort((a, b) => (a.slot_number ?? 99) - (b.slot_number ?? 99));
+  const activeAds = billboards.filter((billboard) => billboard.ad_type === "map").sort((a, b) => (a.slot_number ?? 99) - (b.slot_number ?? 99));
 
   // All 5 slots taken means there's nothing to click into — the empty-
   // slot "+" button (the only obvious "advertise here" affordance) simply

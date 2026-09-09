@@ -54,8 +54,11 @@ export default function PhotoUpload({ value, onChange, label = "Photo" }: PhotoU
 
   return (
     <div>
-      <label className="admin-label">{label}</label>
-      <div className="mt-1.5">
+      {/* Omitted rather than rendered empty: the ad form groups three
+          uploads under one heading, and three blank label rows between
+          them read as broken spacing. */}
+      {label ? <label className="admin-label">{label}</label> : null}
+      <div className={label ? "mt-1.5" : ""}>
         {shown ? (
           <div className="relative overflow-hidden rounded-[1.25rem] border border-[var(--ink-line)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}

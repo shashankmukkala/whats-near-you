@@ -4687,3 +4687,30 @@ body {
     display: none;
   }
 }
+
+/* .field-input had colours but no box. The earlier pass styled its border,
+   background and focus ring and never gave it a width, padding or radius —
+   so every text input on /submit and /advertise rendered at the browser's
+   default ~20-character intrinsic width inside a full-width card, which
+   read as a broken form rather than a styled one.
+   Measurements match the rest of the control set: 0.9rem radius, the same
+   as buttons and chips. */
+.field-input {
+  display: block;
+  width: 100%;
+  border-radius: var(--radius-control);
+  padding: 0.65rem 0.85rem;
+  font: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s, background-color 0.18s;
+}
+
+.field-input::placeholder {
+  color: var(--ink-soft);
+}
+
+textarea.field-input {
+  resize: vertical;
+  min-height: 5.5rem;
+}

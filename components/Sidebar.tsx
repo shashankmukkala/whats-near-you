@@ -50,8 +50,7 @@ type SidebarProps = {
   /** Public navigation is an on-demand drawer so the map stays full-screen. */
   publicMode?: boolean;
   onPlacePandal?: () => void;
-  onPlaceAircraft?: () => void;
-  onPlaceRail?: () => void;
+  onPlaceAd?: () => void;
   /** Mobile only. Ignored at the lg breakpoint, where the rail is always visible. */
   mobileOpen: boolean;
   onMobileClose: () => void;
@@ -69,8 +68,7 @@ export default function Sidebar({
   isAdmin = false,
   publicMode = false,
   onPlacePandal,
-  onPlaceAircraft,
-  onPlaceRail,
+  onPlaceAd,
   mobileOpen,
   onMobileClose,
 }: SidebarProps) {
@@ -147,7 +145,7 @@ export default function Sidebar({
           );
         })}
 
-        {isAdmin && onPlaceAircraft && onPlaceRail && (
+        {isAdmin && onPlaceAd && (
           <div className="mt-4 border-t border-[var(--ink-line)] pt-3">
             <div className={`mb-1.5 px-3 text-[10px] font-semibold tracking-[0.16em] text-[var(--ink-soft)] uppercase ${isCollapsed ? "sr-only" : ""}`}>
               Place on map
@@ -155,8 +153,7 @@ export default function Sidebar({
             {onPlacePandal && (
               <PlaceButton label="Pin a pandal" glyph="📍" collapsed={isCollapsed} onClick={() => { onPlacePandal(); onMobileClose(); }} />
             )}
-            <PlaceButton label="Place rail ad" glyph="▦" collapsed={isCollapsed} onClick={() => { onPlaceRail(); onMobileClose(); }} />
-            <PlaceButton label="Aircraft banner" glyph="✈" collapsed={isCollapsed} onClick={() => { onPlaceAircraft(); onMobileClose(); }} />
+            <PlaceButton label="Publish an ad" glyph="▦" collapsed={isCollapsed} onClick={() => { onPlaceAd(); onMobileClose(); }} />
           </div>
         )}
       </nav>

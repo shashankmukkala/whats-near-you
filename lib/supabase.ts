@@ -106,13 +106,13 @@ export type Billboard = {
   id: string;
   name: string;
   /**
-   * Two formats. The 3D billboard was retired in migration 0006 — it was a
-   * three.js panel placed at a coordinate, and the map opens flat, where a
-   * 3D panel is just a flat rectangle with none of the presence it was
-   * sold for. The aircraft banner was always a DOM overlay for that same
-   * reason.
-   */
-  ad_type: "aircraft" | "rail";
+    * Where the ad is seen, which is also how it is priced (see
+    * lib/adPlacements.ts). The 3D billboard went in 0006 and the aircraft
+    * banner in 0008 — the latter had no natural inventory limit, so there
+    * was no scarcity to sell, and it competed with the pins for the one
+    * thing the map is for.
+    */
+  ad_type: "map" | "card";
   slot_number: number | null;
   image_url: string | null;
   target_url: string | null;

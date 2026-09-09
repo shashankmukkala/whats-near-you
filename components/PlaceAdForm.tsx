@@ -7,7 +7,7 @@ import { adminFetch } from "@/lib/adminFetch";
 
 type Props = { existing: Billboard[]; onCancel: () => void; onCreated: (billboard: Billboard) => void };
 
-export default function PlaceRailAdForm({ existing, onCancel, onCreated }: Props) {
+export default function PlaceAdForm({ existing, onCancel, onCreated }: Props) {
   const [slot, setSlot] = useState(1);
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -15,7 +15,7 @@ export default function PlaceRailAdForm({ existing, onCancel, onCreated }: Props
   const [campaignEnd, setCampaignEnd] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const occupied = new Set(existing.filter((item) => item.ad_type === "rail").map((item) => item.slot_number));
+  const occupied = new Set(existing.filter((item) => item.ad_type === "map").map((item) => item.slot_number));
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();
@@ -23,7 +23,7 @@ export default function PlaceRailAdForm({ existing, onCancel, onCreated }: Props
     setSubmitting(true);
     setError("");
     try {
-      const response = await adminFetch("/api/billboards", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name.trim(), ad_type: "rail", slot_number: slot, image_url: imageUrl || null, target_url: targetUrl || null, campaign_end: campaignEnd || null, lng: 0, lat: 0 }) });
+      const response = await adminFetch("/api/billboards", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name.trim(), ad_type: "map", slot_number: slot, image_url: imageUrl || null, target_url: targetUrl || null, campaign_end: campaignEnd || null, lng: 0, lat: 0 }) });
       if (!response.ok) {
         const body = await response.json().catch(() => null);
         throw new Error(body?.error || "The server could not save this rail ad.");

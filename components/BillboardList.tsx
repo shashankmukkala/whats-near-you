@@ -5,8 +5,8 @@ import PanelShell from "@/components/PanelShell";
 import { isCampaignActive } from "@/lib/adFilter";
 
 const AD_TYPE_LABELS: Record<Billboard["ad_type"], string> = {
-  rail: "Map rail",
-  aircraft: "Aircraft banner",
+  map: "Map slot",
+  card: "Pandal card",
 };
 
 function timeAgo(iso: string) {
@@ -50,13 +50,13 @@ export default function BillboardList({ items, onDelete, onClose }: BillboardLis
           <div key={item.id} className="group flex w-full items-start gap-2 rounded-xl px-2 py-1.5 hover:bg-[var(--accent-tint)]">
             <div className="flex min-w-0 flex-1 items-start gap-3 px-1 py-1">
               <span className="text-lg leading-none" aria-hidden="true">
-                {item.ad_type === "aircraft" ? "✈" : "▦"}
+                {item.ad_type === "card" ? "▤" : "▦"}
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm font-medium text-[var(--ink)]">{item.name}</span>
                 <span className="block truncate text-xs text-[var(--ink-muted)]">
                   {AD_TYPE_LABELS[item.ad_type]}
-                  {item.ad_type === "rail" && item.slot_number ? ` · slot ${item.slot_number}` : ""}
+                  {item.slot_number ? ` · slot ${item.slot_number}` : ""}
                   {" · "}
                   {item.campaign_end ? `${expired ? "ended" : "until"} ${formatDate(item.campaign_end)}` : timeAgo(item.created_at)}
                 </span>

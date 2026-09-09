@@ -19,8 +19,12 @@ export async function POST(request: NextRequest) {
   if (!name || typeof lng !== "number" || typeof lat !== "number") {
     return NextResponse.json({ error: "name, lng, and lat are required" }, { status: 400 });
   }
-  if (ad_type === "rail" && (!Number.isInteger(slot_number) || slot_number < 1 || slot_number > 5)) {
-    return NextResponse.json({ error: "Rail ads require a slot number from 1 to 5." }, { status: 400 });
+  // Both placements have finite inventory — see lib/adPlacements.ts. The
+  // unique index is the real guarantee; this returns a readable error
+  // instead of a constraint violation.
+  const maxSlot = ad_type === "card" ? 3 : 5;
+  if (!Number.isInteger(slot_number) || slot_number < 1 || slot_number > maxSlot) {
+    return NextResponse.json({ error: `Pick a slot from 1 to ${maxSlot}.` }, { status: 400 });
   }
 
   // Every sponsored format — billboard, aircraft banner, rail slot — is
@@ -34,10 +38,10 @@ export async function POST(request: NextRequest) {
     .from("billboards")
     .insert({
       name,
-      // Two formats only (migration 0006). Anything unrecognised falls to
-      // aircraft rather than being trusted through to the CHECK constraint.
-      ad_type: ad_type === "rail" ? "rail" : "aircraft",
-      slot_number: ad_type === "rail" && Number.isInteger(slot_number) && slot_number >= 1 && slot_number <= 5 ? slot_number : null,
+      // Two placements (migration 0008). Anything unrecognised falls to
+      // the map slot rather than being trusted through to the constraint.
+      ad_type: ad_type === "card" ? "card" : "map",
+      slot_number,
       image_url: image_url ?? null,
       target_url: target_url ?? null,
       campaign_end: campaign_end || null,

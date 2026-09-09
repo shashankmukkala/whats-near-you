@@ -3,7 +3,8 @@
 export type AdEnquiry = {
   id: string;
   brand_name: string;
-  ad_format: "map_rail" | "aircraft";
+  ad_format: "map" | "card";
+  amount_inr?: number | null;
   contact_name: string;
   contact: string;
   image_url: string | null;
@@ -18,8 +19,7 @@ export type AdEnquiry = {
 
 type Props = { enquiries: AdEnquiry[]; onStatus: (id: string, status: "approved" | "rejected") => void; onClose: () => void };
 
-const FORMAT_LABELS = { map_rail: "Five-slot rail", billboard: "3D billboard", aircraft: "Aircraft banner" };
-const FORMAT_PRICES = { map_rail: "₹1,000", billboard: "₹3,000", aircraft: "₹3,000" };
+import { AD_PLACEMENTS } from "@/lib/adPlacements";
 
 export default function AdEnquiriesPanel({ enquiries, onStatus, onClose }: Props) {
   return (
@@ -29,7 +29,7 @@ export default function AdEnquiriesPanel({ enquiries, onStatus, onClose }: Props
         {enquiries.length === 0 && <div className="admin-enquiries-empty">No advertiser enquiries yet.</div>}
         {enquiries.map((enquiry) => (
           <article key={enquiry.id} className="admin-enquiry-item">
-            <div className="admin-enquiry-item-top"><div><span className="admin-enquiry-format">{FORMAT_LABELS[enquiry.ad_format]} · {FORMAT_PRICES[enquiry.ad_format]}</span><h3>{enquiry.brand_name}</h3></div><span className={`admin-enquiry-status status-${enquiry.status}`}>{enquiry.status}</span></div>
+            <div className="admin-enquiry-item-top"><div><span className="admin-enquiry-format">{AD_PLACEMENTS[enquiry.ad_format].label} · ₹{enquiry.amount_inr ?? AD_PLACEMENTS[enquiry.ad_format].priceInr}</span><h3>{enquiry.brand_name}</h3></div><span className={`admin-enquiry-status status-${enquiry.status}`}>{enquiry.status}</span></div>
             <div className="admin-enquiry-meta">{enquiry.contact_name} · {enquiry.contact}</div>
             {(enquiry.campaign_start || enquiry.campaign_end) && <div className="admin-enquiry-meta">Campaign: {enquiry.campaign_start || "Any date"} → {enquiry.campaign_end || "Open ended"}</div>}
             {enquiry.message && <p className="admin-enquiry-message">{enquiry.message}</p>}

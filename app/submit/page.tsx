@@ -13,7 +13,6 @@ export default function SubmitPage() {
   const [knownFor, setKnownFor] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [mediaUrl, setMediaUrl] = useState("");
-  const [contactName, setContactName] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [coords, setCoords] = useState<{ lng: number; lat: number } | null>(null);
   const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
@@ -37,7 +36,6 @@ export default function SubmitPage() {
           known_for: knownFor,
           image_url: imageUrl,
           media_url: mediaUrl,
-          contact_name: contactName,
           contact_phone: contactPhone,
           lng: coords!.lng,
           lat: coords!.lat,
@@ -86,27 +84,49 @@ export default function SubmitPage() {
 
       <div className="mx-auto max-w-2xl px-4 py-10 sm:px-6 sm:py-14">
         <span className="section-eyebrow">Add a pandal</span>
-        <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-[var(--ink)] sm:text-4xl">
-          Put your neighbourhood on the map.
+        <h1 className="mt-3 text-[2rem] leading-tight font-extrabold tracking-tight text-[var(--ink)] sm:text-4xl">
+          Let the whole city find yours.
         </h1>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--ink-muted)] sm:text-base">
-          Takes about a minute, and it&apos;s free. Everything is checked by a person before it goes live,
-          which is why the map is worth trusting.
-        </p>
+        <p className="mt-3 text-[15px] text-[var(--ink-muted)]">Takes a minute, and it is free.</p>
 
         <form onSubmit={submit} className="card-elevated mt-8 p-6 sm:p-8">
-          <label className="admin-label">
-            Pandal name <span className="text-[var(--accent-deep)]">*</span>
+          <PhotoUpload value={imageUrl} onChange={setImageUrl} label="Photo of the pandal" />
+
+          <label className="admin-label mt-6">
+            Pandal or association name <span className="text-[var(--accent-deep)]">*</span>
           </label>
           <input
-            autoFocus
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="field-input mt-1.5"
-            placeholder="Ramnagar Ka Raja"
+            placeholder="e.g. Ramnagar Ka Raja"
           />
 
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <label className="admin-label mt-5">
+            Contact phone <span className="text-[var(--accent-deep)]">*</span>
+          </label>
+          <input
+            type="tel"
+            value={contactPhone}
+            onChange={(e) => setContactPhone(e.target.value)}
+            className="field-input mt-1.5"
+            placeholder="10-digit mobile number"
+          />
+          <p className="mt-1.5 text-[11.5px] text-[var(--ink-soft)]">
+            So we can check with you. Never shown on the site.
+          </p>
+
+          <div className="mt-6">
+            <label className="admin-label">
+              Location <span className="text-[var(--accent-deep)]">*</span>
+            </label>
+            <p className="mt-1 mb-2 text-[11.5px] text-[var(--ink-soft)]">
+              This is exactly what Directions opens, so it is worth getting right.
+            </p>
+            <LocationPicker value={coords} onChange={setCoords} />
+          </div>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <div>
               <label className="admin-label">Area</label>
               <input
@@ -117,88 +137,41 @@ export default function SubmitPage() {
               />
             </div>
             <div>
-              <label className="admin-label">Full address</label>
+              <label className="admin-label">Street or landmark</label>
               <input
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 className="field-input mt-1.5"
-                placeholder="Street, landmark"
+                placeholder="Near the water tank"
               />
             </div>
           </div>
 
-          <div className="mt-6">
-            <label className="admin-label">
-              Location <span className="text-[var(--accent-deep)]">*</span>
-            </label>
-            <p className="mt-1 mb-2 text-xs text-[var(--ink-muted)]">
-              This is what &ldquo;Directions&rdquo; will open, so it&apos;s worth getting exactly right.
-            </p>
-            <LocationPicker value={coords} onChange={setCoords} />
-          </div>
+          <label className="admin-label mt-5">Anything else</label>
+          <textarea
+            value={knownFor}
+            onChange={(e) => setKnownFor(e.target.value)}
+            rows={3}
+            className="field-input mt-1.5"
+            placeholder="The idol, the decorations, how long it has been running."
+          />
 
-          <div className="mt-6">
-            <label className="admin-label">What is it known for?</label>
-            <textarea
-              value={knownFor}
-              onChange={(e) => setKnownFor(e.target.value)}
-              rows={3}
-              className="field-input mt-1.5"
-              placeholder="The idol, the decorations, how long it has been running, what draws people."
-            />
-          </div>
-
-          <div className="mt-6">
-            <PhotoUpload value={imageUrl} onChange={setImageUrl} label="Photo of the pandal" />
-          </div>
-
-          <div className="mt-4">
-            <label className="admin-label">Instagram / reel link</label>
-            <input
-              value={mediaUrl}
-              onChange={(e) => setMediaUrl(e.target.value)}
-              className="field-input mt-1.5"
-              placeholder="https://instagram.com/…"
-            />
-          </div>
-
-          <div className="mt-8 rounded-[1.25rem] border border-[var(--ink-line)] bg-[#ffffff80] p-5">
-            <p className="text-xs font-semibold text-[var(--ink-muted)]">
-              So we can check with you — never shown on the site.
-            </p>
-            <div className="mt-3 grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="admin-label">Your name</label>
-                <input
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                  className="field-input mt-1.5"
-                  placeholder="Association or your name"
-                />
-              </div>
-              <div>
-                <label className="admin-label">
-                  Phone <span className="text-[var(--accent-deep)]">*</span>
-                </label>
-                <input
-                  type="tel"
-                  value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}
-                  className="field-input mt-1.5"
-                  placeholder="+91 …"
-                />
-              </div>
-            </div>
-          </div>
+          <label className="admin-label mt-5">Instagram or reel link</label>
+          <input
+            value={mediaUrl}
+            onChange={(e) => setMediaUrl(e.target.value)}
+            className="field-input mt-1.5"
+            placeholder="https://instagram.com/…"
+          />
 
           {error && <p className="mt-4 text-xs text-[#c22b1f]">{error}</p>}
 
-          <div className="mt-7 flex items-center justify-between gap-3">
-            <p className="text-xs text-[var(--ink-muted)]">Listing is free.</p>
-            <button type="submit" disabled={!ready || status === "sending"} className="btn-primary">
-              {status === "sending" ? "Sending…" : "Submit — it's free"}
-            </button>
-          </div>
+          <button type="submit" disabled={!ready || status === "sending"} className="btn-primary mt-7 w-full">
+            {status === "sending" ? "Sending…" : "Submit, it is free"}
+          </button>
+          <p className="mt-3 text-center text-[11.5px] text-[var(--ink-soft)]">
+            Checked by a person before it appears on the map.
+          </p>
         </form>
       </div>
     </main>

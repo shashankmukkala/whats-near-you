@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
   const brand_name = clean(body.brand_name, 120);
-  const ad_format = clean(body.ad_format, 30) || "map_rail";
+  const ad_format = clean(body.ad_format, 30) || "map";
   const contact_name = clean(body.contact_name, 120);
   const contact = clean(body.contact, 160);
   const image_url = clean(body.image_url, 500) || null;
@@ -33,12 +33,15 @@ export async function POST(request: NextRequest) {
   const message = clean(body.message, 1000) || null;
   const payment_proof_url = clean(body.payment_proof_url, 500) || null;
 
-  if (!(["map_rail", "billboard", "aircraft"] as string[]).includes(ad_format)) {
+  if (!(["map", "card"] as string[]).includes(ad_format)) {
     return NextResponse.json({ error: "Choose a valid advertising format." }, { status: 400 });
   }
 
-  if (brand_name.length < 2 || contact_name.length < 2 || contact.length < 5) {
-    return NextResponse.json({ error: "Brand name, contact name and contact details are required." }, { status: 400 });
+  // contact_name is optional now: the form asks for a business name and a
+  // phone, which is what an advertiser actually has to hand. Falling back
+  // to the brand keeps the column populated for the admin inbox.
+  if (brand_name.length < 2 || contact.length < 5) {
+    return NextResponse.json({ error: "A brand name and a contact number are required." }, { status: 400 });
   }
 
   if (!isSupabaseConfigured()) {
@@ -48,7 +51,7 @@ export async function POST(request: NextRequest) {
   const { error } = await supabase.from("ad_enquiries").insert({
     brand_name,
     ad_format,
-    contact_name,
+    contact_name: contact_name || brand_name,
     contact,
     image_url,
     target_url,
@@ -56,6 +59,9 @@ export async function POST(request: NextRequest) {
     campaign_end,
     message,
     payment_proof_url,
+    // Recorded at submission rather than read back off the config later,
+    // which would misreport anyone who bought before a price change.
+    amount_inr: Number.isInteger(body.amount_inr) ? body.amount_inr : null,
     status: "pending",
   });
 

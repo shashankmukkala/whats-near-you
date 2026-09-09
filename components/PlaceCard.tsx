@@ -158,9 +158,9 @@ export default function PlaceCard(props: PlaceCardProps) {
           <div className="detail-card-meta truncate">
             {isPlace
               ? place?.area
-              : billboard?.ad_type === "rail"
-                ? "Centre map sponsor"
-                : `${item.lat.toFixed(5)}, ${item.lng.toFixed(5)}`}
+              : billboard?.ad_type === "card"
+                ? "Pandal card sponsor"
+                : "Map slot sponsor"}
           </div>
         </div>
         <button
@@ -248,10 +248,10 @@ export default function PlaceCard(props: PlaceCardProps) {
           people open a pandal card at all, so it is not one of four
           equal-weight cells. */}
       <div className="detail-card-actions">
-        {billboard?.ad_type === "rail" ? (
+        {billboard ? (
           <span className="detail-card-action-primary detail-card-action-static">
             <span aria-hidden="true">▦</span>
-            Map rail placement
+            Sponsored placement
           </span>
         ) : (
           <a href={directionsUrl} target="_blank" rel="noopener noreferrer" className="detail-card-action-primary">

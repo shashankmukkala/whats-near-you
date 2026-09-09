@@ -5,10 +5,8 @@ import type { Map as MapLibreMap } from "maplibre-gl";
 import MapView from "@/components/Map";
 import PlaceMarkers from "@/components/PlaceMarkers";
 import PendingMarker from "@/components/PendingMarker";
-import AircraftAdOverlay from "@/components/AircraftAdOverlay";
 import PlacePandalForm from "@/components/PlacePandalForm";
-import PlaceAircraftForm from "@/components/PlaceAircraftForm";
-import PlaceRailAdForm from "@/components/PlaceRailAdForm";
+import PlaceAdForm from "@/components/PlaceAdForm";
 import PlaceEventForm from "@/components/PlaceEventForm";
 import TopBar from "@/components/TopBar";
 import SearchResultsPanel from "@/components/SearchResultsPanel";
@@ -27,7 +25,7 @@ import { deriveAreas, deriveTags } from "@/lib/vocabulary";
 import { activeBillboards } from "@/lib/adFilter";
 import type { AdminPlace, Billboard, CityEvent, Place } from "@/lib/supabase";
 
-type PlacingMode = "pandal" | "aircraft" | "rail" | null;
+type PlacingMode = "pandal" | "ad" | null;
 type Selected = { kind: "place"; item: Place } | { kind: "billboard"; item: Billboard } | null;
 
 type MapExperienceProps = {
@@ -406,7 +404,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
   // different pin does not land here and cannot close the card it just
   // opened.
   function handleMapClick(lngLat: { lng: number; lat: number }) {
-    if (isAdmin && placingMode && placingMode !== "aircraft") {
+    if (isAdmin && placingMode) {
       setPendingCoords(lngLat);
       return;
     }
@@ -512,14 +510,6 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
       return;
     }
     setSelected({ kind: "billboard", item: billboard });
-    if (billboard.ad_type !== "rail") {
-      map?.flyTo({
-        center: [billboard.lng, billboard.lat],
-        zoom: Math.max(map.getZoom(), 16),
-        padding: cameraPadding(),
-        essential: true,
-      });
-    }
   }
 
   async function deleteEvent(id: string) {
@@ -529,14 +519,6 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
     } catch {
       // best-effort — it stays removed from view even if the request fails
     }
-  }
-
-  function startAircraftPlacement() {
-    if (!isAdmin || !map) return;
-    const center = map.getCenter();
-    setPlacingMode("aircraft");
-    setPendingCoords({ lng: center.lng, lat: center.lat });
-    setSelected(null);
   }
 
   function handleExplore() {
@@ -586,8 +568,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
           isAdmin={isAdmin}
           publicMode={!isAdmin}
           onPlacePandal={() => toggleMode("pandal")}
-          onPlaceAircraft={startAircraftPlacement}
-          onPlaceRail={() => toggleMode("rail")}
+          onPlaceAd={() => toggleMode("ad")}
           mobileOpen={mobileNavOpen}
           onMobileClose={() => setMobileNavOpen(false)}
         />
@@ -660,14 +641,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
               selectedId={selected?.kind === "place" ? selected.item.id : null}
               onSelect={selectPlace}
             />
-            <AircraftAdOverlay
-              billboards={liveBillboards}
-              selectedId={selected?.kind === "billboard" ? selected.item.id : null}
-              onSelect={selectBillboard}
-            />
-            {isAdmin && placingMode !== "aircraft" && (
-              <PendingMarker map={map} coords={pendingCoords} onDragEnd={setPendingCoords} />
-            )}
+            {isAdmin && <PendingMarker map={map} coords={pendingCoords} onDragEnd={setPendingCoords} />}
 
             <MapAttribution />
 
@@ -697,20 +671,9 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
               />
             )}
 
-            {isAdmin && placingMode === "rail" && (
-              <PlaceRailAdForm
+            {isAdmin && placingMode === "ad" && (
+              <PlaceAdForm
                 existing={billboards}
-                onCancel={cancelPlacement}
-                onCreated={(billboard) => {
-                  setBillboards((prev) => [billboard, ...prev]);
-                  cancelPlacement();
-                }}
-              />
-            )}
-
-            {isAdmin && pendingCoords && placingMode === "aircraft" && (
-              <PlaceAircraftForm
-                coords={pendingCoords}
                 onCancel={cancelPlacement}
                 onCreated={(billboard) => {
                   setBillboards((prev) => [billboard, ...prev]);
