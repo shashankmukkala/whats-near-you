@@ -10,11 +10,11 @@
 //                          on a cream card, and a baked-in white square
 //                          would show as a box on both.
 //   public/logo.png        transparent, 512px — the site header.
-//   app/icon.png           512px on cream — the browser tab and the icon
+//   app/icon.png           512px on paper — the browser tab and the icon
 //                          Android uses. NOT transparent: a tab bar can be
 //                          any colour, and dark ink on nothing disappears
 //                          against a dark one.
-//   app/apple-icon.png     180px on cream — iOS home screen, which fills
+//   app/apple-icon.png     180px on paper — iOS home screen, which fills
 //                          transparency with black.
 //
 // Run again whenever logo.png changes. Outputs are committed, so the site
@@ -101,13 +101,13 @@ async function write(path, size, background) {
   }
   await image.png({ compressionLevel: 9 }).toFile(path);
   const kb = (fs.statSync(path).size / 1024).toFixed(0);
-  console.log(`  ${path.padEnd(24)} ${size}px  ${kb}KB${background ? "  on cream" : "  transparent"}`);
+  console.log(`  ${path.padEnd(24)} ${size}px  ${kb}KB${background ? "  on paper" : "  transparent"}`);
 }
 
-const cream = { r: 253, g: 243, b: 224, alpha: 1 };
+const paper = { r: 247, g: 243, b: 236, alpha: 1 };
 console.log("");
 await write("public/logo-mark.png", 256, null);
 await write("public/logo.png", 512, null);
-await write("app/icon.png", 512, cream);
-await write("app/apple-icon.png", 180, cream);
+await write("app/icon.png", 512, paper);
+await write("app/apple-icon.png", 180, paper);
 console.log("");

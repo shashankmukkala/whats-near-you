@@ -107,7 +107,7 @@ export const ROAD_LINE_COLOR_OVERRIDES: Record<string, string> = {
 // dark-restyled at runtime; the ramp and road overrides above are from
 // that era and are no longer applied — see the note in components/Map.tsx
 // for why they are kept rather than deleted.
-export const MAP_BACKGROUND_COLOR = "#fdf3e0";
+export const MAP_BACKGROUND_COLOR = "#f7f3ec";
 
 // General-interest POI layers in OpenFreeMap's "liberty" style
 // (poi_r1/r7/r20, source-layer "poi") render every OSM point of interest

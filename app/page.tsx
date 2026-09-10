@@ -92,7 +92,10 @@ export default async function Home({
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 10% 0%, rgba(244,169,60,0.30), transparent 46%), radial-gradient(circle at 92% 10%, rgba(232,84,63,0.16), transparent 44%)",
+              // Brass and vermilion at low strength, not the saffron-peach
+              // wash this replaces. Kept faint on purpose: on ivory the page
+              // should read as paper with a warm cast, not as a gradient.
+              "radial-gradient(circle at 8% -10%, rgba(201,155,69,0.20), transparent 44%), radial-gradient(circle at 94% 4%, rgba(193,54,47,0.09), transparent 42%)",
           }}
         />
         <div className="relative mx-auto grid max-w-6xl items-center gap-6 px-5 pt-10 pb-12 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:pt-14 lg:pb-10">

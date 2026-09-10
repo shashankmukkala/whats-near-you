@@ -4749,3 +4749,489 @@ textarea.field-input {
 .place-pin-selected .place-pin-icon {
   background: #fff;
 }
+
+/* ==========================================================================
+   IVORY — the WhatsNearYou visual system
+   --------------------------------------------------------------------------
+   This replaces a palette and a component set that were lifted, value for
+   value, from another site's stylesheet: its exact saffron, its cream, its
+   brown ink, its 1.75rem/0.9rem radius pair, its 650 control weight, its
+   shadow formulas, its typeface. Same broad idea, none of the same
+   specifics — and the specifics were the problem.
+
+   What is different here, and why each choice reads as more considered:
+
+   INK BUTTONS, NOT GRADIENT PILLS. The old primary was a saffron gradient
+   with a coloured glow beneath it. Gradient-and-glow is the house style of
+   every consumer app of the last five years; a flat near-black button with
+   a tight radius is what editorial and luxury brands use, because it
+   asserts nothing and therefore reads as confident.
+
+   RULES, NOT SHADOWS. The old cards floated on 80px warm drop shadows with
+   an inset white top edge. Here they sit on the page with a single
+   hairline. Heavy shadow says "app"; a rule says "printed". On ivory, a
+   1px line at 12% ink is enough to separate two surfaces, and the page
+   stops looking like it is made of stacked cards.
+
+   SHARPER CORNERS. 10px cards against 6px controls, where the old pair was
+   28px against 14px. Very round reads friendly and soft; tighter corners
+   read precise. Nothing else changes the character of an interface this
+   much for this little.
+
+   SERIF DISPLAY. Instrument Serif for headlines against Inter for the
+   interface. A single well-set serif is the cheapest premium signal there
+   is, and it puts real distance between this and a Geist-everywhere site.
+
+   ONE COLOUR, ONE MEANING still holds — the rule survives, the values do
+   not:
+
+     vermilion #C1362F  primary action, the product's own voice
+     brass     #C99B45  live, lit, happening now
+     green     #2F6F4E  confirmed, verified, informational
+     indigo    #5B4B8A  SPONSORED ONLY
+
+   Brass for "live" rather than a red is deliberate: on a festival that
+   happens after dark, the thing that says a pandal is open is lamplight,
+   and vermilion is already spoken for by the primary action. It also keeps
+   the two most-used colours on opposite sides of the wheel, so a live
+   badge never reads as a button.
+   ========================================================================== */
+
+:root,
+.map-experience-shell {
+  /* Paper. Warmer and lighter than the cream it replaces, closer to an
+     uncoated stock than to a tinted UI background. */
+  --cream-50: #ffffff;
+  --cream-100: #f7f3ec;
+  --cream-200: #efe9de;
+
+  /* Ink. Near-black with a trace of warmth, not the brown it replaces:
+     brown ink is a strong signature and it was not ours. */
+  --ink: #221f1a;
+  --ink-muted: #221f1aa6;
+  --ink-soft: #221f1a70;
+  --ink-line: #221f1a1f;
+  --ink-line-strong: #221f1a38;
+
+  /* Primary. Sindoor vermilion. */
+  --accent: #c1362f;
+  --accent-soft: #d8564c;
+  --accent-deep: #9e2a24;
+  --accent-tint: #c1362f1f;
+  --accent-wash: #c1362f0d;
+
+  /* Live. Brass — lamplight, not alarm. */
+  --accent-live: #c99b45;
+  --accent-live-deep: #8f6a22;
+  --accent-live-soft: #c99b4526;
+  --accent-live-tint: #c99b4526;
+  --accent-live-line: #c99b4559;
+
+  --accent-info: #2f6f4e;
+  --accent-info-tint: #2f6f4e1f;
+
+  --accent-ad: #5b4b8a;
+  --accent-ad-tint: #5b4b8a17;
+
+  /* Flat, not gradient. Kept as a variable because a dozen rules reference
+     it; they now all resolve to a solid colour. */
+  --gradient-accent: linear-gradient(0deg, var(--accent), var(--accent));
+  --gradient-panel: linear-gradient(0deg, #ffffff, #ffffff);
+
+  /* Depth is a rule plus the faintest lift, never a coloured glow. */
+  --shadow-card: 0 1px 2px #221f1a0a, 0 8px 24px -18px #221f1a2e;
+  --shadow-panel: 0 1px 2px #221f1a0a, 0 12px 32px -22px #221f1a38;
+  --shadow-soft: 0 1px 2px #221f1a0a;
+  --shadow-accent: none;
+
+  --radius-card: 10px;
+  --radius-control: 6px;
+
+  --background: var(--cream-100);
+  --foreground: var(--ink);
+  --card: #ffffff;
+  --card-foreground: var(--ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--ink);
+  --primary: var(--accent);
+  --primary-foreground: #fffaf6;
+  --secondary: var(--cream-200);
+  --secondary-foreground: var(--ink);
+  --muted: var(--cream-200);
+  --muted-foreground: var(--ink-muted);
+  --border: var(--ink-line);
+  --input: var(--ink-line);
+  --ring: var(--accent);
+}
+
+html,
+body {
+  background: var(--cream-100);
+  color: var(--ink);
+}
+
+/* ---- Display type ------------------------------------------------------ */
+
+/* Headlines only. Instrument Serif has one weight, so size and tracking do
+   the work rather than boldness — which is the point: a serif set large and
+   tight needs no help. Interface text stays in Inter, where a serif would
+   cost legibility at 13px for nothing. */
+h1,
+.display {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* ---- Surfaces ---------------------------------------------------------- */
+
+.card-elevated,
+.is-public .detail-card,
+.is-admin .detail-card,
+.admin-enquiries-panel {
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-card);
+  background-image: none;
+  background-color: #ffffff;
+  box-shadow: var(--shadow-card);
+  animation: none;
+}
+
+.card-glass,
+.panel-elevated,
+.is-public .panel-elevated,
+.is-admin .panel-elevated {
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-card);
+  background-color: #fffffff2;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-panel);
+  animation: none;
+}
+
+.is-public .topbar-shell,
+.is-admin .topbar-shell {
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-card);
+  background: #fffffff2;
+  box-shadow: var(--shadow-panel);
+}
+
+.navigation-drawer {
+  border-right: 1px solid var(--ink-line) !important;
+  border-radius: 0;
+  background-image: none;
+  background-color: #ffffff;
+  box-shadow: var(--shadow-panel);
+}
+
+/* ---- Controls ---------------------------------------------------------- */
+
+/* Ink, not vermilion, and flat, not gradient. The primary action is the
+   most-repeated shape in the interface, so it sets the tone more than any
+   other single element — and a near-black rectangle sets a quieter, more
+   expensive one than a glowing orange pill. Vermilion stays for the things
+   that need to be noticed rather than pressed. */
+.btn-primary {
+  border-radius: var(--radius-control);
+  padding: 0.6rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fffaf6;
+  background: var(--ink);
+  box-shadow: none;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: #3a352d;
+  transform: none;
+}
+
+.btn-secondary {
+  border-radius: var(--radius-control);
+  padding: 0.6rem 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink-line-strong);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: #221f1a08;
+  border-color: var(--ink);
+  transform: none;
+}
+
+.btn-ghost {
+  border-radius: var(--radius-control);
+  font-weight: 600;
+  color: var(--ink-muted);
+}
+
+.btn-ghost:hover {
+  background: #221f1a0a;
+  color: var(--ink);
+}
+
+.field-input,
+.admin-input,
+.search-input {
+  border-radius: var(--radius-control);
+  border: 1px solid var(--ink-line-strong);
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.field-input:focus,
+.admin-input:focus,
+.search-input:focus {
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px #221f1a14;
+}
+
+.chip-trigger,
+.filter-chip {
+  border-radius: var(--radius-control);
+  border: 1px solid var(--ink-line-strong);
+  background: transparent;
+  color: var(--ink-muted);
+  font-weight: 600;
+}
+
+.chip-trigger:hover,
+.filter-chip:hover {
+  background: #221f1a08;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.chip-trigger.is-active,
+.filter-chip.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fffaf6;
+  box-shadow: none;
+}
+
+.chip-trigger-count {
+  background: #ffffff2e;
+}
+
+/* Brass, and outlined until it is on. A live filter that is switched off
+   should not look like a live pandal. */
+.live-toggle {
+  border-radius: var(--radius-control);
+  border: 1px solid var(--accent-live-line);
+  background: transparent;
+  color: var(--accent-live-deep);
+  font-weight: 600;
+}
+
+.live-toggle:hover {
+  background: var(--accent-live-tint);
+}
+
+.live-toggle.is-active {
+  background: var(--accent-live);
+  border-color: var(--accent-live);
+  color: #2a1f06;
+  box-shadow: none;
+}
+
+.menu-trigger {
+  border-radius: var(--radius-control);
+  border: 1px solid var(--ink-line-strong);
+  background: transparent;
+  color: var(--ink);
+}
+
+.menu-trigger:hover {
+  background: #221f1a08;
+}
+
+.advertise-cta {
+  border-radius: var(--radius-control);
+  border: 1px solid #5b4b8a3d;
+  background: var(--accent-ad-tint);
+  color: var(--accent-ad);
+}
+
+/* ---- Editorial marks --------------------------------------------------- */
+
+/* Brass, not vermilion. An eyebrow is a label, not an alarm, and brass at
+   this size reads as an ink colour rather than a highlight. */
+.section-eyebrow,
+.eyebrow,
+.known-for-eyebrow,
+.ad-rail-kicker {
+  color: var(--accent-live-deep);
+  letter-spacing: 0.18em;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.known-for {
+  border-left: 2px solid var(--accent-live);
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  background: #221f1a05;
+}
+
+.known-for-secondary {
+  border-left-color: var(--ink-line-strong);
+}
+
+.known-for-toggle {
+  color: var(--accent-deep);
+}
+
+.season-strip {
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-control);
+  background: transparent;
+}
+
+.season-strip.is-live {
+  border-color: var(--accent-live-line);
+  background: var(--accent-live-tint);
+}
+
+.season-strip.is-live .season-strip-state {
+  color: var(--accent-live-deep);
+}
+
+.season-strip.is-live .season-strip-dot,
+.results-row-dot.is-live,
+.live-toggle-dot {
+  background: var(--accent-live);
+}
+
+.results-row-dot.is-live {
+  box-shadow: 0 0 0 3px var(--accent-live-tint);
+}
+
+.detail-card-action-primary {
+  border-radius: var(--radius-control);
+  background: var(--ink);
+  color: #fffaf6;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.detail-card-action-icon {
+  border-radius: var(--radius-control);
+  border: 1px solid var(--ink-line-strong);
+  background: transparent;
+}
+
+.detail-card-link {
+  color: var(--accent-deep);
+}
+
+.detail-card-name {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ---- Map ---------------------------------------------------------------- */
+
+.place-pin {
+  border-radius: var(--radius-control);
+  border: 1px solid var(--ink-line-strong);
+  background: #ffffff;
+  box-shadow: var(--shadow-card);
+}
+
+.place-pin-selected {
+  border-color: var(--ink);
+  background: var(--ink);
+  box-shadow: var(--shadow-panel);
+}
+
+.place-pin-selected .place-pin-icon {
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.place-pin-selected .place-pin-label {
+  color: #fffaf6;
+}
+
+.place-pin-live::after {
+  border-color: var(--accent-live);
+  border-radius: var(--radius-control);
+}
+
+.ad-rail {
+  border: 1px solid var(--ink-line);
+  border-radius: var(--radius-card);
+  background: #fffffff2;
+  box-shadow: var(--shadow-panel);
+}
+
+.news-launcher {
+  border: 1px solid var(--ink-line);
+  border-right: 0;
+  border-radius: var(--radius-control) 0 0 var(--radius-control);
+  background: #fffffff2;
+  color: var(--ink-muted);
+  box-shadow: var(--shadow-soft);
+}
+
+.news-launcher:hover,
+.news-launcher[aria-expanded="true"] {
+  background: var(--ink);
+  color: #fffaf6;
+}
+
+.map-control-orb,
+.map-rotation-pad,
+.map-action-button,
+.map-add-button,
+.maplibregl-ctrl-group {
+  border-radius: var(--radius-control) !important;
+  border: 1px solid var(--ink-line-strong) !important;
+  background: #ffffff !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+.picker-pin {
+  border-radius: var(--radius-control);
+  transform: none;
+  background: var(--ink);
+  border: 2px solid #ffffff;
+  box-shadow: var(--shadow-panel);
+}
+
+/* ---- Admin ------------------------------------------------------------- */
+
+.admin-btn-primary {
+  border-radius: var(--radius-control);
+  background: var(--ink);
+  color: #fffaf6;
+  box-shadow: none;
+}
+
+.admin-btn-primary:hover:not(:disabled) {
+  background: #3a352d;
+  filter: none;
+}
+
+.admin-enquiry-approve {
+  background: var(--ink);
+  color: #fffaf6;
+}
+
+.nav-item-active {
+  background: #221f1a0d !important;
+  color: var(--ink) !important;
+}
+
+.brand-mark {
+  background: none;
+  box-shadow: none;
+}

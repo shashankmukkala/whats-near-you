@@ -25,9 +25,9 @@ import type { Place } from "@/lib/supabase";
  */
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const INK = "#0b0b0d";
-const CORAL = "#ff6b6b";
-const MINT = "#79e2b2";
+const INK = "#1a1713";
+const BRASS = "#c99b45";
+const PAPER = "#f7f3ec";
 
 export async function GET(request: NextRequest) {
   const raw = request.nextUrl.searchParams.get("place");
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
 
   const live = place ? isLiveNow(place) : false;
   const timing = place ? seasonLabel(place) : null;
-  const accent = live ? CORAL : MINT;
+  const accent = live ? BRASS : PAPER;
 
   return new ImageResponse(
     (
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
           // as the map's aurora, and its rim cut straight through the
           // title. A gradient stop is the only way to get a soft falloff
           // in this renderer.
-          backgroundImage: `radial-gradient(circle at 88% 8%, rgba(255,107,107,0.30) 0%, rgba(255,107,107,0.10) 32%, rgba(255,107,107,0) 58%), linear-gradient(150deg, ${INK} 0%, #16121a 55%, #0a0a0c 100%)`,
+          backgroundImage: `radial-gradient(circle at 88% 6%, rgba(201,155,69,0.22) 0%, rgba(201,155,69,0.06) 34%, rgba(201,155,69,0) 60%), linear-gradient(150deg, ${INK} 0%, #221d16 55%, #14110d 100%)`,
           backgroundColor: INK,
           color: "#f4fff9",
           fontFamily: "sans-serif",
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
               width: 72,
               height: 72,
               borderRadius: 999,
-              background: "#fdf3e0",
+              background: PAPER,
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -130,7 +130,7 @@ export async function GET(request: NextRequest) {
               padding: "14px 26px",
               borderRadius: 999,
               border: `2px solid ${accent}`,
-              background: live ? "rgba(255,107,107,0.14)" : "rgba(121,226,178,0.1)",
+              background: live ? "rgba(201,155,69,0.16)" : "rgba(247,243,236,0.07)",
               fontSize: 30,
               fontWeight: 600,
               color: accent,

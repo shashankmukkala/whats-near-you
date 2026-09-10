@@ -1,15 +1,28 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Instrument_Serif, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-// Geist. Its numerals and tighter apertures hold up at the small sizes
-// this UI leans on, and 800 is needed for the landing headlines.
-const sans = Geist({
+// Two faces doing two jobs. Inter runs the interface, where a serif would
+// cost legibility at 13px for nothing. Instrument Serif runs the
+// headlines, where one well-set serif is the cheapest premium signal there
+// is — and it puts real distance between this and the Geist-everywhere
+// site this design used to resemble.
+//
+// Instrument Serif ships one weight on purpose: size and tracking do the
+// work instead of boldness, which is why it looks composed rather than
+// shouted.
+const sans = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
+});
+
+const display = Instrument_Serif({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 const geistMono = Geist_Mono({
@@ -66,7 +79,7 @@ export const metadata: Metadata = {
 // THEME.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cn("antialiased", geistMono.variable, "font-sans", sans.variable)}>
+    <html lang="en" className={cn("antialiased", geistMono.variable, "font-sans", sans.variable, display.variable)}>
       {/* No h-full on either element, and this matters more than it looks.
           `height: 100%` pins the document to exactly the viewport, so a
           page taller than one screen renders its overflow but the window
