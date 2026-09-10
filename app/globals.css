@@ -4714,3 +4714,18 @@ textarea.field-input {
   resize: vertical;
   min-height: 5.5rem;
 }
+
+/* The enquiries panel kept square corners and a mint hairline while every
+   other surface moved to the 1.75rem card. It read as an unstyled box
+   dropped into a styled page — the sort of thing that is obvious in a
+   screenshot and invisible in a diff. */
+.admin-enquiries-panel {
+  border: 1px solid var(--accent-tint);
+  border-radius: var(--radius-card);
+  background: var(--gradient-panel);
+  box-shadow: var(--shadow-card);
+}
+
+.admin-enquiries-list {
+  padding: 12px;
+}

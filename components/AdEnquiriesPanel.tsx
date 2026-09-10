@@ -17,14 +17,13 @@ export type AdEnquiry = {
   created_at: string;
 };
 
-type Props = { enquiries: AdEnquiry[]; onStatus: (id: string, status: "approved" | "rejected") => void; onClose: () => void };
+type Props = { enquiries: AdEnquiry[]; onStatus: (id: string, status: "approved" | "rejected") => void };
 
 import { AD_PLACEMENTS } from "@/lib/adPlacements";
 
-export default function AdEnquiriesPanel({ enquiries, onStatus, onClose }: Props) {
+export default function AdEnquiriesPanel({ enquiries, onStatus }: Props) {
   return (
     <section className="admin-enquiries-panel panel-elevated">
-      <header className="admin-enquiries-header"><div><span className="ad-rail-kicker">ADVERTISING</span><h2>Campaign enquiries</h2><p>{enquiries.filter((item) => item.status === "pending").length} awaiting review</p></div><button type="button" onClick={onClose} aria-label="Close enquiries">×</button></header>
       <div className="admin-enquiries-list">
         {enquiries.length === 0 && <div className="admin-enquiries-empty">No advertiser enquiries yet.</div>}
         {enquiries.map((enquiry) => (

@@ -1,7 +1,6 @@
 "use client";
 
 import type { Billboard } from "@/lib/supabase";
-import PanelShell from "@/components/PanelShell";
 import { isCampaignActive } from "@/lib/adFilter";
 
 const AD_TYPE_LABELS: Record<Billboard["ad_type"], string> = {
@@ -25,7 +24,6 @@ function formatDate(iso: string) {
 type BillboardListProps = {
   items: Billboard[];
   onDelete?: (id: string) => void;
-  onClose: () => void;
 };
 
 /**
@@ -36,9 +34,9 @@ type BillboardListProps = {
  * person who needs to see that a placement has lapsed, because a lapsed
  * rail ad is a slot that can be sold again.
  */
-export default function BillboardList({ items, onDelete, onClose }: BillboardListProps) {
+export default function BillboardList({ items, onDelete }: BillboardListProps) {
   return (
-    <PanelShell title="Placements" subtitle={`${items.length} published`} onClose={onClose}>
+    <div className="card-elevated overflow-hidden p-3">
       {items.length === 0 && (
         <div className="px-3 py-6 text-center text-sm text-[var(--ink-muted)]">
           No placements yet — publish one from the map&apos;s &ldquo;Place on map&rdquo; tools.
@@ -77,6 +75,6 @@ export default function BillboardList({ items, onDelete, onClose }: BillboardLis
           </div>
         );
       })}
-    </PanelShell>
+    </div>
   );
 }

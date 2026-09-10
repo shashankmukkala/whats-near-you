@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AdminGate from "@/components/AdminGate";
 import AdEnquiriesPanel, { type AdEnquiry } from "@/components/AdEnquiriesPanel";
@@ -16,7 +15,6 @@ export default function AdminAdEnquiriesPage() {
 }
 
 function AdEnquiriesAdmin() {
-  const router = useRouter();
   const { session } = useAdminAuth();
   const accessToken = session?.access_token ?? null;
   const [enquiries, setEnquiries] = useState<AdEnquiry[]>([]);
@@ -68,7 +66,7 @@ function AdEnquiriesAdmin() {
         {loading ? (
           <div className="admin-enquiries-empty">Loading…</div>
         ) : (
-          <AdEnquiriesPanel enquiries={enquiries} onStatus={updateStatus} onClose={() => router.push("/admin")} />
+          <AdEnquiriesPanel enquiries={enquiries} onStatus={updateStatus} />
         )}
       </div>
     </div>

@@ -34,6 +34,19 @@ const SUBMISSIONS_ICON = (
   </svg>
 );
 
+const PIN_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+    <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" />
+    <circle cx="12" cy="10" r="2.5" />
+  </svg>
+);
+
+const SIGN_OUT_ICON = (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+    <path d="M15 17l5-5-5-5M20 12H9M12 20H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6" />
+  </svg>
+);
+
 const ENQUIRIES_ICON = (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
     <path d="M4 6h16v12H4zM4 7l8 6 8-6" />
@@ -51,6 +64,10 @@ type SidebarProps = {
   publicMode?: boolean;
   onPlacePandal?: () => void;
   onPlaceAd?: () => void;
+  /** Signed-in admins need a way out. Threaded down rather than calling
+   *  useAdminAuth here, because this component also renders on the public
+   *  map and that hook mounts the admin Supabase client's listeners. */
+  onSignOut?: () => void;
   /** Mobile only. Ignored at the lg breakpoint, where the rail is always visible. */
   mobileOpen: boolean;
   onMobileClose: () => void;
@@ -69,6 +86,7 @@ export default function Sidebar({
   publicMode = false,
   onPlacePandal,
   onPlaceAd,
+  onSignOut,
   mobileOpen,
   onMobileClose,
 }: SidebarProps) {
@@ -80,7 +98,7 @@ export default function Sidebar({
         { label: "News", icon: NEWS_ICON, action: "news" },
         { label: "Submissions", icon: SUBMISSIONS_ICON, href: "/admin/submissions" },
         { label: "Ad enquiries", icon: ENQUIRIES_ICON, href: "/admin/ad-enquiries" },
-        { label: "Billboards", icon: ADVERTISE_ICON, href: "/admin/billboards" },
+        { label: "Placements", icon: ADVERTISE_ICON, href: "/admin/billboards" },
       ]
     : [
         { label: "Explore map", icon: EXPLORE_ICON, action: "explore" },
@@ -151,9 +169,9 @@ export default function Sidebar({
               Place on map
             </div>
             {onPlacePandal && (
-              <PlaceButton label="Pin a pandal" glyph="📍" collapsed={isCollapsed} onClick={() => { onPlacePandal(); onMobileClose(); }} />
+              <PlaceButton label="Pin a pandal" icon={PIN_ICON} collapsed={isCollapsed} onClick={() => { onPlacePandal(); onMobileClose(); }} />
             )}
-            <PlaceButton label="Publish an ad" glyph="▦" collapsed={isCollapsed} onClick={() => { onPlaceAd(); onMobileClose(); }} />
+            <PlaceButton label="Publish an ad" icon={ADVERTISE_ICON} collapsed={isCollapsed} onClick={() => { onPlaceAd(); onMobileClose(); }} />
           </div>
         )}
       </nav>
@@ -202,7 +220,12 @@ export default function Sidebar({
           <aside className="panel-elevated flex h-full w-full flex-col gap-1 overflow-y-auto overflow-x-hidden rounded-3xl p-3.5">
             {renderBrand(false)}
             {renderNav(false)}
-            <div className="mt-auto flex flex-col gap-2 pt-4">{renderFooter(false)}</div>
+            <div className="mt-auto flex flex-col gap-2 pt-4">
+              {isAdmin && onSignOut && (
+                <PlaceButton label="Sign out" icon={SIGN_OUT_ICON} collapsed={collapsed} onClick={onSignOut} />
+              )}
+              {renderFooter(false)}
+            </div>
           </aside>
         </div>
       )}
@@ -215,7 +238,12 @@ export default function Sidebar({
           <SheetTitle className="sr-only">Navigation</SheetTitle>
           {renderBrand(true)}
           {renderNav(true)}
-          <div className="mt-auto flex flex-col gap-2 pt-4">{renderFooter(true)}</div>
+          <div className="mt-auto flex flex-col gap-2 pt-4">
+            {isAdmin && onSignOut && (
+              <PlaceButton label="Sign out" icon={SIGN_OUT_ICON} collapsed={false} onClick={onSignOut} />
+            )}
+            {renderFooter(true)}
+          </div>
         </SheetContent>
       </Sheet>
     </>
@@ -224,12 +252,12 @@ export default function Sidebar({
 
 function PlaceButton({
   label,
-  glyph,
+  icon,
   collapsed,
   onClick,
 }: {
   label: string;
-  glyph: string;
+  icon: React.ReactNode;
   collapsed: boolean;
   onClick: () => void;
 }) {
@@ -239,7 +267,7 @@ function PlaceButton({
       title={collapsed ? label : undefined}
       className="group flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-[13.5px] font-medium text-[var(--ink-muted)] transition-colors hover:bg-[var(--accent-tint)] hover:text-[var(--accent-deep)]"
     >
-      <span className="shrink-0" aria-hidden="true">{glyph}</span>
+      <span className="shrink-0" aria-hidden="true">{icon}</span>
       <span className={`overflow-hidden whitespace-nowrap ${SIDEBAR_TRANSITION} ${collapsed ? "max-w-0 opacity-0" : "max-w-[160px] opacity-100"}`}>
         {label}
       </span>

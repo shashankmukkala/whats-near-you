@@ -70,7 +70,7 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
   // safe to call unconditionally. Threaded down into PlaceCard's
   // admin-only edit form, which cannot call this itself without mounting
   // the admin client's listeners on every public page load too.
-  const { session: adminSession } = useAdminAuth();
+  const { session: adminSession, signOut: adminSignOut } = useAdminAuth();
   const adminAccessToken = adminSession?.access_token ?? null;
 
   useEffect(() => {
@@ -569,20 +569,13 @@ export default function MapExperience({ isAdmin }: MapExperienceProps) {
           publicMode={!isAdmin}
           onPlacePandal={() => toggleMode("pandal")}
           onPlaceAd={() => toggleMode("ad")}
+          onSignOut={adminSignOut}
           mobileOpen={mobileNavOpen}
           onMobileClose={() => setMobileNavOpen(false)}
         />
       </div>
 
       <div className="map-main-shell min-h-0 flex min-w-0 flex-1 flex-col gap-2 overflow-y-auto sm:gap-3 lg:overflow-hidden">
-        {isAdmin && (
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center pt-2">
-            <div className="rounded-full border border-[var(--ink-line)] bg-[var(--cream-50)] px-4 py-1 text-xs font-semibold tracking-wide text-[var(--ink-muted)] uppercase shadow-sm">
-              Admin mode
-            </div>
-          </div>
-        )}
-
         <div className="relative z-20">
           <TopBar
             // Handed the list filtered by everything EXCEPT area (see

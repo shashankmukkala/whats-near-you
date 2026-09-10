@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AdminGate from "@/components/AdminGate";
 import BillboardList from "@/components/BillboardList";
@@ -17,7 +16,6 @@ export default function AdminBillboardsPage() {
 }
 
 function BillboardsAdmin() {
-  const router = useRouter();
   const { session } = useAdminAuth();
   const accessToken = session?.access_token ?? null;
   const [billboards, setBillboards] = useState<Billboard[]>([]);
@@ -58,7 +56,7 @@ function BillboardsAdmin() {
           </Link>
           <h1 className="mt-1 text-lg font-semibold">Placements</h1>
           <p className="text-xs text-[var(--ink-muted)]">
-            {billboards.length} pinned placement{billboards.length === 1 ? "" : "s"}
+            {billboards.length} published
           </p>
         </div>
       </header>
@@ -67,7 +65,7 @@ function BillboardsAdmin() {
         {loading ? (
           <div className="admin-enquiries-empty">Loading…</div>
         ) : (
-          <BillboardList items={billboards} onDelete={deleteBillboard} onClose={() => router.push("/admin")} />
+          <BillboardList items={billboards} onDelete={deleteBillboard} />
         )}
       </div>
     </div>
