@@ -82,7 +82,21 @@ for (const path of PAGES) {
       .map((m) => ({ rgb: [+m[1], +m[2], +m[3]], alpha: m[4] === undefined ? 1 : +m[4] }))
       .filter((c) => c.alpha > 0.5 && luminance(c.rgb) < 0.12);
 
-    if (darkPaints.length && !/aircraft|picker-pin|place-pin|brand-mark|btn-primary/.test(p.key)) {
+    // The landing cover is deliberately a dark poster — see
+    // components/HeroPoster. Its ground and its two light layers are meant
+    // to be dark, so the useful question there is not "is this dark" but
+    // "can the text on it be read", which the ratio check below still asks
+    // of every element that carries text.
+    //
+    // Matched on the poster's own structural classes rather than by page,
+    // so a dark surface leaking onto any other screen is still caught.
+    // Note the escaped brackets. Unescaped, `min-h-[100svh]` is a character
+    // class matching "min-h-" plus any one of 1/0/s/v/h — which never
+    // matches the literal class name, so the cover kept being flagged while
+    // the pattern looked correct.
+    const deliberateDark = /min-h-\[100svh\]|-z-30|-z-20|-z-10|font-telugu|mix-blend-overlay/.test(p.key);
+
+    if (darkPaints.length && !deliberateDark && !/aircraft|picker-pin|place-pin|brand-mark|btn-primary/.test(p.key)) {
       findings++;
       console.log(`  ${path}  ${p.key.slice(0, 52)}`);
       console.log(`      dark surface: ${p.bgImage ? p.bgImage.slice(0, 70) : p.bg}`);

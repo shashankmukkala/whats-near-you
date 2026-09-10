@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { redirect } from "next/navigation";
-import SiteHeader from "@/components/SiteHeader";
+import HeroPoster from "@/components/HeroPoster";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { isCurrent, isLiveNow, SEASON_ENDS_AT, SEASON_STARTS_AT } from "@/lib/season";
 import type { Place } from "@/lib/supabase";
@@ -83,77 +82,11 @@ export default async function Home({
 
   return (
     <main className="bg-[var(--cream-100)]">
-      <SiteHeader />
 
-      {/* ---- Hero ------------------------------------------------------ */}
-      <section className="relative overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage:
-              // Brass and vermilion at low strength, not the saffron-peach
-              // wash this replaces. Kept faint on purpose: on ivory the page
-              // should read as paper with a warm cast, not as a gradient.
-              "radial-gradient(circle at 8% -10%, rgba(201,155,69,0.20), transparent 44%), radial-gradient(circle at 94% 4%, rgba(193,54,47,0.09), transparent 42%)",
-          }}
-        />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-6 px-5 pt-10 pb-12 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8 lg:pt-14 lg:pb-10">
-          {/* Cut out by scripts/cutout-hero.mjs. Empty alt on purpose — it
-              is decoration, and the headline beside it already says what
-              the page is; a screen reader announcing the artwork would
-              just be noise before the actual content. */}
-          <div className="order-first mx-auto w-full max-w-[17rem] lg:order-last lg:max-w-[24rem]">
-            <Image
-              src="/ganesha-cutout.png"
-              alt=""
-              width={1254}
-              height={1254}
-              priority
-              sizes="(max-width: 1023px) 17rem, 24rem"
-              className="h-auto w-full"
-            />
-          </div>
-
-          <div className="text-center lg:text-left">
-            <span className="section-eyebrow">{dates}</span>
-            <h1 className="mt-3 text-[2.15rem] leading-[1.05] font-extrabold tracking-tight text-[var(--ink)] sm:text-[3.4rem]">
-              Every pandal in the city, on one map.
-            </h1>
-            <p className="mt-4 text-[17px] text-[var(--ink-muted)]">
-              See what&apos;s near you, and what&apos;s open tonight.
-            </p>
-
-            <div className="mt-7 flex flex-wrap justify-center gap-2.5 lg:justify-start">
-              <Link href="/map" className="btn-primary">
-                See the map
-              </Link>
-              <Link href="/submit" className="btn-secondary">
-                Add a pandal
-              </Link>
-            </div>
-
-            {/* Bare numbers rather than three bordered boxes. The boxes gave
-                equal visual weight to a stat row and the primary action
-                sitting right above it. */}
-            <dl className="mt-9 flex justify-center gap-8 lg:justify-start">
-              {[
-                { value: stats.total, label: "pandals" },
-                { value: stats.areas, label: "areas" },
-                { value: stats.live, label: "open now" },
-              ].map((stat) => (
-                <div key={stat.label}>
-                  <dt className="text-2xl font-extrabold tracking-tight text-[var(--accent-deep)]">{stat.value}</dt>
-                  <dd className="mt-0.5 text-xs font-semibold text-[var(--ink-soft)]">{stat.label}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </div>
-      </section>
+      <HeroPoster dates={dates} stats={stats} />
 
       {/* ---- What it does ---------------------------------------------- */}
-      <section className="mx-auto max-w-6xl px-5 sm:px-6">
+      <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-6 sm:pt-20">
         <div className="card-elevated grid gap-7 p-7 sm:grid-cols-3 sm:p-8">
           <Feature icon="area" title="By area" body="Ram Nagar to Balapur." />
           <Feature icon="clock" title="Open now" body="Real dates on every pandal." />

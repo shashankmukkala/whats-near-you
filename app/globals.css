@@ -5235,3 +5235,9 @@ h1,
   background: none;
   box-shadow: none;
 }
+
+/* The Telugu display face, used only on the cover. Scoped to a class so it
+   never leaks into interface text, where Inter is doing a different job. */
+.font-telugu {
+  font-family: var(--font-telugu), Georgia, serif;
+}
