@@ -59,14 +59,18 @@ async function open(path, area, waitMs = 1800) {
   const page = await open("/", "home");
   const links = await page.locator("a[href]").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
   for (const href of ["/map", "/submit", "/advertise"]) {
-    links.includes(href) ? pass("home", `links to ${href}`) : fail("home", `links to ${href}`, "missing");
+    if (links.includes(href)) pass("home", `links to ${href}`);
+    else fail("home", `links to ${href}`, "missing");
   }
   const stats = await page.locator("dt").allTextContents();
-  stats.length === 3 && stats.every((s) => /^\d+$/.test(s.trim()))
-    ? pass("home", "stat row reads real numbers", stats.join(" / "))
-    : fail("home", "stat row reads real numbers", stats.join(" / ") || "none");
+  if (stats.length === 3 && stats.every((s) => /^\d+$/.test(s.trim()))) {
+    pass("home", "stat row reads real numbers", stats.join(" / "));
+  } else {
+    fail("home", "stat row reads real numbers", stats.join(" / ") || "none");
+  }
   const heroImg = await page.locator("img").first().evaluate((el) => el.naturalWidth).catch(() => 0);
-  heroImg > 0 ? pass("home", "hero image loads", `${heroImg}px wide`) : fail("home", "hero image loads", "naturalWidth 0");
+  if (heroImg > 0) pass("home", "hero image loads", `${heroImg}px wide`);
+  else fail("home", "hero image loads", "naturalWidth 0");
   await page.close();
 }
 
@@ -74,7 +78,8 @@ async function open(path, area, waitMs = 1800) {
 {
   const page = await open("/map", "map", 5000);
   const pins = await page.locator(".place-pin").count();
-  pins > 0 ? pass("map", "pins render", `${pins} pins`) : fail("map", "pins render", "none");
+  if (pins > 0) pass("map", "pins render", `${pins} pins`);
+  else fail("map", "pins render", "none");
 
   // Open a card by name, avoiding the Secunderabad clump where pins overlap.
   const target = page.locator('[aria-label="Open Khairatabad Ganesh"]');
@@ -82,17 +87,18 @@ async function open(path, area, waitMs = 1800) {
     await target.click({ timeout: 10000 }).catch(() => {});
     await page.waitForTimeout(1500);
     const card = await page.locator(".detail-card").count();
-    card ? pass("map", "card opens on pin click") : fail("map", "card opens on pin click", "no .detail-card");
+    if (card) pass("map", "card opens on pin click");
+    else fail("map", "card opens on pin click", "no .detail-card");
 
     const directions = await page.locator('.detail-card a[href*="maps"]').count();
-    directions ? pass("map", "card has a Directions link") : fail("map", "card has a Directions link", "missing");
+    if (directions) pass("map", "card has a Directions link");
+    else fail("map", "card has a Directions link", "missing");
 
     // Close it again — the X, which is the path most people take.
     await page.locator(".detail-card .panel-close-button").click().catch(() => {});
     await page.waitForTimeout(900);
-    (await page.locator(".detail-card").count()) === 0
-      ? pass("map", "card closes")
-      : fail("map", "card closes", "still open");
+    if ((await page.locator(".detail-card").count()) === 0) pass("map", "card closes");
+    else fail("map", "card closes", "still open");
   } else fail("map", "card opens on pin click", "Khairatabad pin not found");
 
   // Search
@@ -100,7 +106,8 @@ async function open(path, area, waitMs = 1800) {
   await search.fill("ram nagar");
   await page.waitForTimeout(1600);
   const results1 = await page.locator(".panel-elevated").filter({ hasText: "match" }).count();
-  results1 ? pass("map", "search finds an area") : fail("map", "search finds an area", "no results panel");
+  if (results1) pass("map", "search finds an area");
+  else fail("map", "search finds an area", "no results panel");
   await search.fill("");
   await page.waitForTimeout(900);
 
@@ -108,7 +115,8 @@ async function open(path, area, waitMs = 1800) {
   await page.locator(".live-toggle").click().catch(() => {});
   await page.waitForTimeout(1200);
   const liveActive = await page.locator(".live-toggle.is-active").count();
-  liveActive ? pass("map", "Live now toggles") : fail("map", "Live now toggles", "no active state");
+  if (liveActive) pass("map", "Live now toggles");
+  else fail("map", "Live now toggles", "no active state");
   await page.locator(".live-toggle").click().catch(() => {});
   await page.waitForTimeout(600);
 
@@ -116,13 +124,16 @@ async function open(path, area, waitMs = 1800) {
   await page.locator(".chip-trigger").first().click().catch(() => {});
   await page.waitForTimeout(800);
   const chips = await page.locator(".filter-chip").count();
-  chips > 1 ? pass("map", "filter panel opens", `${chips} chips`) : fail("map", "filter panel opens", `${chips} chips`);
+  if (chips > 1) pass("map", "filter panel opens", `${chips} chips`);
+  else fail("map", "filter panel opens", `${chips} chips`);
 
   // Ad rail
   const railSlots = await page.locator(".ad-rail-slot").count();
-  railSlots === 5 ? pass("map", "ad rail shows 5 slots") : fail("map", "ad rail shows 5 slots", `${railSlots}`);
+  if (railSlots === 5) pass("map", "ad rail shows 5 slots");
+  else fail("map", "ad rail shows 5 slots", `${railSlots}`);
   const railLink = await page.locator('.ad-rail a[href*="advertise"], .ad-rail button').count();
-  railLink ? pass("map", "ad rail is clickable") : fail("map", "ad rail is clickable", "no control");
+  if (railLink) pass("map", "ad rail is clickable");
+  else fail("map", "ad rail is clickable", "no control");
 
   await page.close();
 }
@@ -133,29 +144,27 @@ async function open(path, area, waitMs = 1800) {
   if (Array.isArray(list) && list.length) {
     pass("api", "/api/places returns rows", `${list.length}`);
     const leak = ["verification_status", "coord_source"].filter((k) => k in list[0]);
-    leak.length ? fail("api", "no internal fields in payload", leak.join(",")) : pass("api", "no internal fields in payload");
+    if (leak.length) fail("api", "no internal fields in payload", leak.join(","));
+    else pass("api", "no internal fields in payload");
 
     const id = list.find((p) => /Khairatabad/.test(p.name))?.id ?? list[0].id;
     const page = await open(`/map?place=${id}`, "deeplink", 5000);
-    (await page.locator(".detail-card").count())
-      ? pass("deeplink", "?place= opens the card")
-      : fail("deeplink", "?place= opens the card", "no card");
+    if (await page.locator(".detail-card").count()) pass("deeplink", "?place= opens the card");
+    else fail("deeplink", "?place= opens the card", "no card");
     await page.close();
 
     // The legacy shape, which is still out in the world on shared links.
     const legacy = await fetch(`${base}/?place=${id}`, { redirect: "manual" });
-    [307, 308, 302].includes(legacy.status)
-      ? pass("deeplink", "/?place= redirects to /map", `HTTP ${legacy.status}`)
-      : fail("deeplink", "/?place= redirects to /map", `HTTP ${legacy.status}`);
+    if ([307, 308, 302].includes(legacy.status)) pass("deeplink", "/?place= redirects to /map", `HTTP ${legacy.status}`);
+    else fail("deeplink", "/?place= redirects to /map", `HTTP ${legacy.status}`);
 
     const og = await fetch(`${base}/map?place=${id}`).then((r) => r.text());
     const image = og.match(/<meta property="og:image" content="([^"]*)"/)?.[1] ?? "";
-    image.startsWith(base) ? pass("seo", "og:image points at this host", image.replace(base, ""))
-      : fail("seo", "og:image points at this host", image || "missing");
+    if (image.startsWith(base)) pass("seo", "og:image points at this host", image.replace(base, ""));
+    else fail("seo", "og:image points at this host", image || "missing");
     const ogImg = await fetch(image.startsWith("http") ? image : base + image);
-    ogImg.ok && (ogImg.headers.get("content-type") ?? "").includes("image")
-      ? pass("seo", "preview image renders", ogImg.headers.get("content-type"))
-      : fail("seo", "preview image renders", `HTTP ${ogImg.status}`);
+    if (ogImg.ok && (ogImg.headers.get("content-type") ?? "").includes("image")) pass("seo", "preview image renders", ogImg.headers.get("content-type"));
+    else fail("seo", "preview image renders", `HTTP ${ogImg.status}`);
   } else fail("api", "/api/places returns rows", JSON.stringify(list).slice(0, 80));
 }
 
@@ -163,23 +172,24 @@ async function open(path, area, waitMs = 1800) {
 {
   const page = await open("/submit", "submit", 4500);
   const map = await page.locator(".maplibregl-canvas").count();
-  map ? pass("submit", "location picker map loads") : fail("submit", "location picker map loads", "no canvas");
+  if (map) pass("submit", "location picker map loads");
+  else fail("submit", "location picker map loads", "no canvas");
 
   const submitBtn = page.locator('button[type="submit"]');
-  (await submitBtn.isDisabled())
-    ? pass("submit", "submit is blocked until valid")
-    : fail("submit", "submit is blocked until valid", "enabled on an empty form");
+  if (await submitBtn.isDisabled()) pass("submit", "submit is blocked until valid");
+  else fail("submit", "submit is blocked until valid", "enabled on an empty form");
 
   const width = await page.locator(".field-input").first().evaluate((el) => el.getBoundingClientRect().width);
-  width > 300 ? pass("submit", "inputs are full width", `${Math.round(width)}px`)
-    : fail("submit", "inputs are full width", `${Math.round(width)}px`);
+  if (width > 300) pass("submit", "inputs are full width", `${Math.round(width)}px`);
+  else fail("submit", "inputs are full width", `${Math.round(width)}px`);
 
   // "Use link" against a real shortened Maps URL.
   await page.locator('input[placeholder*="Google Maps"]').fill("https://maps.app.goo.gl/a3g9VXiotMFFpWkw5");
   await page.locator('button:has-text("Use link")').click();
   await page.waitForTimeout(6000);
   const pinSet = await page.locator("text=Pin set at").count();
-  pinSet ? pass("submit", "pasted Maps link sets the pin") : fail("submit", "pasted Maps link sets the pin", "no pin");
+  if (pinSet) pass("submit", "pasted Maps link sets the pin");
+  else fail("submit", "pasted Maps link sets the pin", "no pin");
   await page.close();
 }
 
@@ -187,15 +197,15 @@ async function open(path, area, waitMs = 1800) {
 {
   const page = await open("/advertise", "advertise", 1500);
   const cards = await page.locator(".card-elevated").count();
-  cards >= 2 ? pass("advertise", "both placements are offered", `${cards}`)
-    : fail("advertise", "both placements are offered", `${cards}`);
+  if (cards >= 2) pass("advertise", "both placements are offered", `${cards}`);
+  else fail("advertise", "both placements are offered", `${cards}`);
   await page.close();
 
   for (const placement of ["map", "card"]) {
     const p = await open(`/advertise/${placement}`, `advertise/${placement}`, 1500);
     const gated = await p.locator("text=payment details appear here").count();
-    gated ? pass(`advertise/${placement}`, "payment gated before details")
-      : fail(`advertise/${placement}`, "payment gated before details", "not gated");
+    if (gated) pass(`advertise/${placement}`, "payment gated before details");
+    else fail(`advertise/${placement}`, "payment gated before details", "not gated");
 
     await p.locator("input").nth(0).fill("Audit Co");
     await p.locator('input[type="tel"]').fill("9876543210");
@@ -209,11 +219,12 @@ async function open(path, area, waitMs = 1800) {
     else fail(`advertise/${placement}`, "UPI id is configured", "no UPI shown");
 
     const qr = await p.locator('img[alt="UPI payment QR code"]').count();
-    qr ? pass(`advertise/${placement}`, "QR renders") : fail(`advertise/${placement}`, "QR renders", "missing");
+    if (qr) pass(`advertise/${placement}`, "QR renders");
+    else fail(`advertise/${placement}`, "QR renders", "missing");
 
     const previews = await p.locator('button:has-text("Remove")').count();
-    previews === 1 ? pass(`advertise/${placement}`, "one upload gives one preview")
-      : fail(`advertise/${placement}`, "one upload gives one preview", `${previews}`);
+    if (previews === 1) pass(`advertise/${placement}`, "one upload gives one preview");
+    else fail(`advertise/${placement}`, "one upload gives one preview", `${previews}`);
     await p.close();
   }
 }
@@ -222,14 +233,14 @@ async function open(path, area, waitMs = 1800) {
 {
   const page = await open("/admin", "admin", 2500);
   const signIn = await page.locator('input[type="password"]').count();
-  signIn ? pass("admin", "sign-in gate shown to anonymous") : fail("admin", "sign-in gate shown to anonymous", "no password field");
+  if (signIn) pass("admin", "sign-in gate shown to anonymous");
+  else fail("admin", "sign-in gate shown to anonymous", "no password field");
   await page.close();
 
   for (const path of ["/admin/submissions", "/admin/ad-enquiries", "/admin/billboards"]) {
     const p = await open(path, "admin", 2000);
-    (await p.locator('input[type="password"]').count())
-      ? pass("admin", `${path} is gated`)
-      : fail("admin", `${path} is gated`, "no sign-in");
+    if (await p.locator('input[type="password"]').count()) pass("admin", `${path} is gated`);
+    else fail("admin", `${path} is gated`, "no sign-in");
     await p.close();
   }
 }
@@ -237,9 +248,11 @@ async function open(path, area, waitMs = 1800) {
 // ------------------------------------------------------------- 404 etc
 {
   const res = await fetch(`${base}/definitely-not-a-page`);
-  res.status === 404 ? pass("misc", "unknown route 404s") : fail("misc", "unknown route 404s", `HTTP ${res.status}`);
+  if (res.status === 404) pass("misc", "unknown route 404s");
+  else fail("misc", "unknown route 404s", `HTTP ${res.status}`);
   const bad = await fetch(`${base}/advertise/nonsense`);
-  bad.status === 404 ? pass("misc", "unknown ad placement 404s") : fail("misc", "unknown ad placement 404s", `HTTP ${bad.status}`);
+  if (bad.status === 404) pass("misc", "unknown ad placement 404s");
+  else fail("misc", "unknown ad placement 404s", `HTTP ${bad.status}`);
 }
 
 await browser.close();
