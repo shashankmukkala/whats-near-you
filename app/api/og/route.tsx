@@ -72,8 +72,29 @@ export async function GET(request: NextRequest) {
         }}
       >
 
-        <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 26, letterSpacing: 2 }}>
-          <span style={{ color: CORAL }}>📍</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 26, letterSpacing: 2 }}>
+          {/* Absolute URL built from the incoming request rather than a
+              hardcoded host: Satori fetches this server-side, so a relative
+              path has nothing to resolve against and the mark silently
+              vanishes from every preview. */}
+          {/* On a cream disc, not bare. The mark is dark linework and this
+              card is near-black, so dropped straight on it only the saffron
+              swoosh survived — the elephant vanished entirely. The disc is
+              the same trick the selected map pin uses. */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 72,
+              height: 72,
+              borderRadius: 999,
+              background: "#fdf3e0",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={new URL("/logo-mark.png", request.url).toString()} width={52} height={52} alt="" />
+          </div>
           <span style={{ color: "rgba(244,255,249,0.72)", fontWeight: 700 }}>WHATSNEARYOU</span>
         </div>
 

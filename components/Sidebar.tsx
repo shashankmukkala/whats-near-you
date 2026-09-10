@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
@@ -110,12 +111,7 @@ export default function Sidebar({
     const isCollapsed = collapsed && !forceExpanded;
     return (
       <div className="mb-5 flex items-center gap-2 px-0.5">
-        <span className="brand-mark flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white shadow-sm">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
-            <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" />
-            <circle cx="12" cy="10" r="2.5" />
-          </svg>
-        </span>
+        <Image src="/logo.png" alt="" width={512} height={512} className="h-9 w-9 shrink-0" />
         <div className={`min-w-0 flex-1 overflow-hidden ${SIDEBAR_TRANSITION} ${isCollapsed ? "max-w-0 opacity-0" : "max-w-[160px] opacity-100"}`}>
           <div className="truncate text-[15px] font-semibold whitespace-nowrap tracking-tight text-[var(--ink)]">
             WhatsNearYou

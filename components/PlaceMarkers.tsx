@@ -5,11 +5,6 @@ import { Map as MapLibreMap, Marker } from "maplibre-gl";
 import type { Place } from "@/lib/supabase";
 import { isLiveNow } from "@/lib/season";
 
-function initialsFor(name: string) {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  return (words.length > 1 ? `${words[0][0]}${words[1][0]}` : name.slice(0, 2)).toUpperCase();
-}
-
 type PlaceMarkersProps = {
   map: MapLibreMap | null;
   places: Place[];
@@ -68,22 +63,19 @@ export default function PlaceMarkers({ map, places, selectedId, onSelect }: Plac
       el.className = `place-pin${live ? " place-pin-live" : ""}`;
       el.setAttribute("aria-label", `Open ${place.name}`);
 
+      // Every pin carries the same mark rather than the pandal's initials
+      // or its own photograph. A map reads better when one kind of thing
+      // looks like one kind of thing — which pandal it is comes from the
+      // label and the card — and a 28px circle is far too small for a
+      // photograph to be anything but a smudge. An uploaded photo still
+      // leads the card, where there is room for it.
       const icon = document.createElement("span");
       icon.className = "place-pin-icon";
-      if (place.image_url) {
-        const image = document.createElement("img");
-        image.src = place.image_url;
-        image.alt = "";
-        image.addEventListener("error", () => {
-          image.remove();
-          icon.textContent = initialsFor(place.name);
-          icon.classList.add("place-pin-icon-fallback");
-        });
-        icon.appendChild(image);
-      } else {
-        icon.textContent = initialsFor(place.name);
-        icon.classList.add("place-pin-icon-fallback");
-      }
+      const image = document.createElement("img");
+      image.src = "/logo-mark.png";
+      image.alt = "";
+      image.decoding = "async";
+      icon.appendChild(image);
 
       const label = document.createElement("span");
       label.className = "place-pin-label";

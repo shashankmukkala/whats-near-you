@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 /**
@@ -12,12 +13,10 @@ export default function SiteHeader({ active }: { active?: "map" | "submit" | "ad
     <header className="sticky top-0 z-30 border-b border-[var(--ink-line)] bg-[#fffdf8cc] backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="brand-mark flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
-              <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z" />
-              <circle cx="12" cy="10" r="2.5" />
-            </svg>
-          </span>
+          {/* The real mark, not the placeholder pin glyph. No coloured
+              tile behind it: the logo is its own shape, and a saffron
+              rounded square around dark linework reads as two logos. */}
+          <Image src="/logo.png" alt="" width={512} height={512} priority className="h-9 w-9 shrink-0" />
           <span className="text-[15px] font-bold tracking-tight text-[var(--ink)]">WhatsNearYou</span>
         </Link>
 

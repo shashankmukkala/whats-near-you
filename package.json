@@ -14,7 +14,8 @@
     "seed:write": "node --env-file=.env.local scripts/seed-pandals.mjs --write",
     "shots": "node scripts/shots.mjs",
     "check:contrast": "node scripts/check-contrast.mjs",
-    "audit": "node scripts/audit.mjs"
+    "audit": "node scripts/audit.mjs",
+    "build:logo": "node scripts/build-logo-assets.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
