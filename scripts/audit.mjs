@@ -162,9 +162,21 @@ async function open(path, area, waitMs = 1800) {
     const image = og.match(/<meta property="og:image" content="([^"]*)"/)?.[1] ?? "";
     if (image.startsWith(base)) pass("seo", "og:image points at this host", image.replace(base, ""));
     else fail("seo", "og:image points at this host", image || "missing");
-    const ogImg = await fetch(image.startsWith("http") ? image : base + image);
-    if (ogImg.ok && (ogImg.headers.get("content-type") ?? "").includes("image")) pass("seo", "preview image renders", ogImg.headers.get("content-type"));
-    else fail("seo", "preview image renders", `HTTP ${ogImg.status}`);
+    // Caught, not thrown. When metadataBase falls back to localhost:3000
+    // and dev is on another port, this host is simply unreachable — and an
+    // auditor that dies on its own first real finding is worse than no
+    // auditor, because it takes every later check down with it.
+    const ogImg = await fetch(image.startsWith("http") ? image : base + image).catch((e) => ({
+      ok: false,
+      status: 0,
+      headers: { get: () => "" },
+      error: String(e.cause?.code ?? e.message).slice(0, 40),
+    }));
+    if (ogImg.ok && (ogImg.headers.get("content-type") ?? "").includes("image")) {
+      pass("seo", "preview image renders", ogImg.headers.get("content-type"));
+    } else {
+      fail("seo", "preview image renders", ogImg.error ?? `HTTP ${ogImg.status}`);
+    }
   } else fail("api", "/api/places returns rows", JSON.stringify(list).slice(0, 80));
 }
 
