@@ -62,15 +62,28 @@ async function open(path, area, waitMs = 1800) {
     if (links.includes(href)) pass("home", `links to ${href}`);
     else fail("home", `links to ${href}`, "missing");
   }
-  const stats = await page.locator("dt").allTextContents();
-  if (stats.length === 3 && stats.every((s) => /^\d+$/.test(s.trim()))) {
-    pass("home", "stat row reads real numbers", stats.join(" / "));
-  } else {
-    fail("home", "stat row reads real numbers", stats.join(" / ") || "none");
-  }
-  const heroImg = await page.locator("img").first().evaluate((el) => el.naturalWidth).catch(() => 0);
-  if (heroImg > 0) pass("home", "hero image loads", `${heroImg}px wide`);
-  else fail("home", "hero image loads", "naturalWidth 0");
+  // The count in the line under the headline is read from the database,
+  // not typed into the copy, which is the whole point of checking it.
+  const line = (await page.locator("footer p").last().textContent()) ?? "";
+  const count = line.match(/(\d+)\s+pandals/);
+  if (count && Number(count[1]) > 0) pass("home", "count reads from the database", count[1]);
+  else fail("home", "count reads from the database", line.trim() || "none");
+
+  // One screen, no scroll. That is the design, and it is the thing most
+  // likely to break silently the next time anything is added to the cover.
+  const overflow = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+  if (overflow <= 1) pass("home", "fits one screen", `${overflow}px over`);
+  else fail("home", "fits one screen", `scrolls ${overflow}px`);
+
+  // The cover art, and which of the two crops the browser picked for this
+  // viewport — the <picture> is art direction, so choosing the wrong crop
+  // is a real failure and not just a slow image.
+  const art = await page
+    .locator("picture img")
+    .evaluate((el) => ({ w: el.naturalWidth, src: (el.currentSrc || "").split("/").pop() }))
+    .catch(() => ({ w: 0, src: "" }));
+  if (art.w > 0) pass("home", "cover art loads", `${art.src} at ${art.w}px`);
+  else fail("home", "cover art loads", "naturalWidth 0");
   await page.close();
 }
 

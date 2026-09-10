@@ -16,6 +16,7 @@
     "check:contrast": "node scripts/check-contrast.mjs",
     "audit": "node scripts/audit.mjs",
     "build:logo": "node scripts/build-logo-assets.mjs",
+    "build:art": "node scripts/build-home-art.mjs",
     "prune:uploads": "node --env-file=.env.local scripts/prune-uploads.mjs"
   },
   "dependencies": {

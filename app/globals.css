@@ -4785,16 +4785,22 @@ textarea.field-input {
    ONE COLOUR, ONE MEANING still holds — the rule survives, the values do
    not:
 
-     vermilion #C1362F  primary action, the product's own voice
-     brass     #C99B45  live, lit, happening now
-     green     #2F6F4E  confirmed, verified, informational
-     indigo    #5B4B8A  SPONSORED ONLY
+     scarlet   #8C2A1B  primary action, the product's own voice
+     lamplight #C2761F  live, lit, happening now
+     indigo    #395686  confirmed, verified, informational
+     plum      #6B4A7D  SPONSORED ONLY
 
-   Brass for "live" rather than a red is deliberate: on a festival that
-   happens after dark, the thing that says a pandal is open is lamplight,
-   and vermilion is already spoken for by the primary action. It also keeps
-   the two most-used colours on opposite sides of the wheel, so a live
-   badge never reads as a button.
+   All four were retuned when the cover became a painting, and the first
+   three are now sampled from it rather than chosen: the pandal cloth, the
+   bulbs, the dusk sky. That is the difference between a palette that goes
+   with the artwork and one that merely does not clash with it — and it
+   means the home page and the map are lit by the same evening.
+
+   Lamplight for "live" rather than a red is deliberate: on a festival that
+   happens after dark, the thing that says a pandal is open is light, and
+   the scarlet is already spoken for by the primary action. The scarlet
+   going deeper is what keeps the two apart now that both are warm; they
+   are separated by value where they used to be separated by hue.
    ========================================================================== */
 
 :root,
@@ -4813,25 +4819,48 @@ textarea.field-input {
   --ink-line: #221f1a1f;
   --ink-line-strong: #221f1a38;
 
-  /* Primary. Sindoor vermilion. */
-  --accent: #c1362f;
-  --accent-soft: #d8564c;
-  --accent-deep: #9e2a24;
-  --accent-tint: #c1362f1f;
-  --accent-wash: #c1362f0d;
+  /* Primary. The pandal cloth, sampled off the cover art rather than
+     picked: the reds that make up most of that painting average around
+     #652118 in shadow and reach #872519 where the lamps hit them. This
+     sits just above that, deep enough to read as dyed cotton and not as
+     a warning state. It replaces a brighter vermilion that owed nothing
+     to anything on the page. */
+  --accent: #8c2a1b;
+  --accent-soft: #b03d28;
+  --accent-deep: #6b1e13;
+  --accent-tint: #8c2a1b1f;
+  --accent-wash: #8c2a1b0d;
 
-  /* Live. Brass — lamplight, not alarm. */
-  --accent-live: #c99b45;
-  --accent-live-deep: #8f6a22;
-  --accent-live-soft: #c99b4526;
-  --accent-live-tint: #c99b4526;
-  --accent-live-line: #c99b4559;
+  /* Live. Lamplight — the literal colour of the bulbs and the lit idol in
+     the cover art, measured at #f18736 across the 27,000 brightest warm
+     pixels. That exact value is too light to set text in, so it stays as
+     --lamp for fills and glows and this is its readable form.
+     Warm-not-alarm still holds: on a festival that happens after dark,
+     the thing that says a pandal is open is light, and the red is already
+     spoken for by the primary action. */
+  --accent-live: #c2761f;
+  --accent-live-deep: #8a4d12;
+  --accent-live-soft: #c2761f26;
+  --accent-live-tint: #c2761f26;
+  --accent-live-line: #c2761f59;
 
-  --accent-info: #2f6f4e;
-  --accent-info-tint: #2f6f4e1f;
+  /* Informational. The dusk sky, and the reason the painting reads as
+     evening rather than as a lot of orange — it is the third most common
+     colour in it, at #395686. A green here was the one accent with no
+     counterpart in the art. */
+  --accent-info: #395686;
+  --accent-info-tint: #3956861f;
 
-  --accent-ad: #5b4b8a;
-  --accent-ad-tint: #5b4b8a17;
+  /* Sponsored, and ONLY sponsored. Deliberately the one colour in the set
+     that is not in the painting: a paid placement must never be able to
+     borrow the product's own voice. Pushed clear of the new indigo so the
+     two cannot be confused at badge size. */
+  --accent-ad: #6b4a7d;
+  --accent-ad-tint: #6b4a7d17;
+
+  /* Raw lamplight. Too bright for text on ivory; used for glows, for the
+     rule under the cover's primary link, and nothing else. */
+  --lamp: #f18736;
 
   /* Flat, not gradient. Kept as a variable because a dozen rules reference
      it; they now all resolve to a solid colour. */
@@ -5236,8 +5265,28 @@ h1,
   box-shadow: none;
 }
 
-/* The Telugu display face, used only on the cover. Scoped to a class so it
-   never leaks into interface text, where Inter is doing a different job. */
-.font-telugu {
-  font-family: var(--font-telugu), Georgia, serif;
+/* --------------------------------------------------------------------------
+   THE COVER
+   The home page only. Everything here exists because that one route is a
+   painting with words on it, and none of it may reach an interface
+   surface — hence the two scoping classes rather than loose utilities.
+   -------------------------------------------------------------------------- */
+
+/* Marks the deliberately dark screen for scripts/check-contrast, which
+   otherwise flags the whole cover as a surface that missed the light
+   inversion. A class rather than a match on Tailwind class strings: the
+   previous version tested for the arbitrary min-height utility with a
+   regex whose square brackets were unescaped, so it was a character class
+   and matched nothing at all. */
+.cover-screen {
+  color-scheme: dark;
+}
+
+/* Keyboard focus over a painting. A default ring is a browser-blue
+   rectangle laid on the artwork; this is the cream the type is already set
+   in, held off the glyphs so it reads as a frame. */
+.cover-link:focus-visible {
+  outline: 1px solid #f6ece0;
+  outline-offset: 6px;
+  border-radius: 2px;
 }

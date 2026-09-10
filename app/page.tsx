@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import HeroPoster from "@/components/HeroPoster";
+import HomeCover from "@/components/HomeCover";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
-import { isCurrent, isLiveNow, SEASON_ENDS_AT, SEASON_STARTS_AT } from "@/lib/season";
+import { isCurrent, SEASON_ENDS_AT, SEASON_STARTS_AT } from "@/lib/season";
 import type { Place } from "@/lib/supabase";
 
 export const metadata: Metadata = {
@@ -16,55 +15,29 @@ const day = (iso: string) => new Date(iso).toLocaleDateString("en-IN", { day: "n
 const dayMonth = (iso: string) =>
   new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "long", timeZone: IST });
 
-/**
- * Counts for the hero, read live rather than written into the copy.
- * "15 pandals" in a string is wrong the moment the sixteenth is added, and
- * nobody remembers to change it.
- */
-async function getStats() {
-  if (!isSupabaseConfigured()) return { total: 0, areas: 0, live: 0 };
+/** How many pandals are listed for this season. Read live, not written into the copy. */
+async function getTotal() {
+  if (!isSupabaseConfigured()) return 0;
   const { data } = await supabase
     .from("places")
-    .select("area,starts_at,ends_at,archived_at")
+    .select("starts_at,ends_at,archived_at")
     .is("archived_at", null);
-
-  const places = (data ?? []) as unknown as Place[];
-  const current = places.filter((p) => isCurrent(p));
-  return {
-    total: current.length,
-    areas: new Set(current.map((p) => p.area).filter(Boolean)).size,
-    live: current.filter((p) => isLiveNow(p)).length,
-  };
+  return ((data ?? []) as unknown as Place[]).filter((p) => isCurrent(p)).length;
 }
 
 /**
- * Line icons, not emoji. Emoji render as a different picture on every
- * platform and drag their own colours into a palette that is doing careful
- * work — a yellow 🕐 next to saffron looks like a mistake on Android and
- * fine on iOS, and there is no way to fix it.
+ * One screen, and only one screen.
+ *
+ * This used to be a hero followed by a feature row, a contribute card and
+ * a footer — four sections restating in prose what three links do. None of
+ * it survived contact with the question "what is this page for". It is for
+ * getting someone to the map, and every extra section was another thing to
+ * scroll past on the way.
+ *
+ * The height is set here rather than on <html>: a global `height: 100%`
+ * pins every route to the viewport, which is how the map page once
+ * rendered its content into a window that had nothing to scroll.
  */
-const ICONS = {
-  area: <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />,
-  clock: <path d="M12 7.5V12l3 1.8M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />,
-  route: <path d="M5 19 19 5M13 5h6v6" />,
-} as const;
-
-function Feature({ icon, title, body }: { icon: keyof typeof ICONS; title: string; body: string }) {
-  return (
-    <div className="flex items-start gap-3.5">
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.9rem] bg-[var(--accent-wash)] text-[var(--accent-deep)]">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.7} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
-          {ICONS[icon]}
-        </svg>
-      </span>
-      <div className="min-w-0">
-        <h3 className="text-[15px] font-bold text-[var(--ink)]">{title}</h3>
-        <p className="mt-1 text-[13.5px] leading-snug text-[var(--ink-muted)]">{body}</p>
-      </div>
-    </div>
-  );
-}
-
 export default async function Home({
   searchParams,
 }: {
@@ -77,54 +50,12 @@ export default async function Home({
   const place = typeof params.place === "string" ? params.place : null;
   if (place) redirect(`/map?place=${encodeURIComponent(place)}`);
 
-  const stats = await getStats();
+  const total = await getTotal();
   const dates = `${day(SEASON_STARTS_AT)}–${dayMonth(SEASON_ENDS_AT)}`;
 
   return (
-    <main className="bg-[var(--cream-100)]">
-
-      <HeroPoster dates={dates} stats={stats} />
-
-      {/* ---- What it does ---------------------------------------------- */}
-      <section className="mx-auto max-w-6xl px-5 pt-14 sm:px-6 sm:pt-20">
-        <div className="card-elevated grid gap-7 p-7 sm:grid-cols-3 sm:p-8">
-          <Feature icon="area" title="By area" body="Ram Nagar to Balapur." />
-          <Feature icon="clock" title="Open now" body="Real dates on every pandal." />
-          <Feature icon="route" title="Directions" body="One tap to Google Maps." />
-        </div>
-      </section>
-
-      {/* ---- Contribute ------------------------------------------------ */}
-      <section className="mx-auto max-w-6xl px-5 py-4 sm:px-6">
-        <div className="card-elevated flex flex-col items-center gap-5 p-8 text-center sm:flex-row sm:justify-between sm:p-9 sm:text-left">
-          <div>
-            <h2 className="text-xl font-bold tracking-tight text-[var(--ink)] sm:text-2xl">
-              Know one we&apos;re missing?
-            </h2>
-            <p className="mt-1.5 text-sm text-[var(--ink-muted)]">Takes a minute. We check every one.</p>
-          </div>
-          <Link href="/submit" className="btn-primary shrink-0">
-            Add a pandal
-          </Link>
-        </div>
-      </section>
-
-      {/* ---- Footer ---------------------------------------------------- */}
-      <footer className="mx-auto max-w-6xl px-5 py-14 text-center sm:px-6">
-        <p className="text-xl font-bold tracking-tight text-[var(--ink)]">He brings us together.</p>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-1">
-          <Link href="/map" className="btn-ghost">
-            Map
-          </Link>
-          <Link href="/submit" className="btn-ghost">
-            Add a pandal
-          </Link>
-          <Link href="/advertise" className="btn-ghost">
-            Publish ads
-          </Link>
-        </div>
-        <p className="mt-5 text-xs text-[var(--ink-soft)]">Made for Hyderabad</p>
-      </footer>
+    <main className="h-[100svh] overflow-hidden">
+      <HomeCover dates={dates} total={total} />
     </main>
   );
 }

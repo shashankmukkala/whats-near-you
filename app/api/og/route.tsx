@@ -20,13 +20,14 @@ import type { Place } from "@/lib/supabase";
  *
  * Colours are hardcoded rather than read from globals.css — this renders
  * in Satori, which has no cascade, no custom properties and no stylesheet.
- * They mirror the palette deliberately: coral for live, mint for
- * information, and saffron nowhere, because saffron means advertising.
+ * They mirror the palette deliberately, which means they have to be
+ * updated by hand when it moves: --accent-live went from brass to
+ * lamplight when the cover became a painting, and this followed it.
  */
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const INK = "#1a1713";
-const BRASS = "#c99b45";
+const LAMP = "#c2761f";
 const PAPER = "#f7f3ec";
 
 export async function GET(request: NextRequest) {
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
 
   const live = place ? isLiveNow(place) : false;
   const timing = place ? seasonLabel(place) : null;
-  const accent = live ? BRASS : PAPER;
+  const accent = live ? LAMP : PAPER;
 
   return new ImageResponse(
     (

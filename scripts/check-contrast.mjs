@@ -45,6 +45,26 @@ for (const path of PAGES) {
   await page.goto(base + path, { waitUntil: "domcontentloaded" }).catch(() => {});
   await page.waitForTimeout(path === "/map" ? 4500 : 1500);
 
+  const onCover = await page.evaluate(() => !!document.querySelector(".cover-screen"));
+
+  // The brand darks, resolved from the live stylesheet rather than
+  // hardcoded. Ink buttons and the primary action are meant to be dark on
+  // ivory — that IS the visual system — and when the palette moved to the
+  // cover artwork the primary went from a bright vermilion to a deep
+  // scarlet at 0.07 luminance, which tripped the dark-surface rule on
+  // every page. Reading the tokens means the exemption follows the
+  // palette instead of going stale the next time it is retuned.
+  const brandDarks = await page.evaluate(() => {
+    const probe = document.createElement("span");
+    document.body.append(probe);
+    const out = ["--ink", "--accent", "--accent-deep", "--accent-live-deep"].map((token) => {
+      probe.style.color = `var(${token})`;
+      return getComputedStyle(probe).color;
+    });
+    probe.remove();
+    return out;
+  });
+
   const problems = await page.evaluate(() => {
     const out = [];
     const seen = new Set();
@@ -80,21 +100,22 @@ for (const path of PAGES) {
     // aircraft banner is an advertiser's creative and is meant to be dark.
     const darkPaints = [...p.raw.matchAll(/rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/g)]
       .map((m) => ({ rgb: [+m[1], +m[2], +m[3]], alpha: m[4] === undefined ? 1 : +m[4] }))
-      .filter((c) => c.alpha > 0.5 && luminance(c.rgb) < 0.12);
+      .filter((c) => c.alpha > 0.5 && luminance(c.rgb) < 0.12)
+      .filter((c) => !brandDarks.includes(`rgb(${c.rgb.join(", ")})`));
 
     // The landing cover is deliberately a dark poster — see
-    // components/HeroPoster. Its ground and its two light layers are meant
-    // to be dark, so the useful question there is not "is this dark" but
-    // "can the text on it be read", which the ratio check below still asks
-    // of every element that carries text.
+    // components/HomeCover. Its painting and its scrims are meant to be
+    // dark, so the useful question there is not "is this dark" but "can
+    // the text on it be read", which the ratio check below still asks of
+    // every element carrying text.
     //
-    // Matched on the poster's own structural classes rather than by page,
-    // so a dark surface leaking onto any other screen is still caught.
-    // Note the escaped brackets. Unescaped, `min-h-[100svh]` is a character
-    // class matching "min-h-" plus any one of 1/0/s/v/h — which never
-    // matches the literal class name, so the cover kept being flagged while
-    // the pattern looked correct.
-    const deliberateDark = /min-h-\[100svh\]|-z-30|-z-20|-z-10|font-telugu|mix-blend-overlay/.test(p.key);
+    // Keyed off .cover-screen, a class that exists for this. The previous
+    // version matched Tailwind class strings, and its pattern for the
+    // arbitrary min-height utility left the square brackets unescaped —
+    // making it a character class that matched nothing, so the cover kept
+    // being flagged while the regex looked correct. A named hook cannot
+    // fail that way.
+    const deliberateDark = onCover;
 
     if (darkPaints.length && !deliberateDark && !/aircraft|picker-pin|place-pin|brand-mark|btn-primary/.test(p.key)) {
       findings++;

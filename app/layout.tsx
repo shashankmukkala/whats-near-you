@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Instrument_Serif, Noto_Serif_Telugu, Geist_Mono } from "next/font/google";
+import { Inter, Instrument_Serif, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -23,16 +23,6 @@ const display = Instrument_Serif({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["400"],
-});
-
-// Telugu, not Devanagari. This is Hyderabad — Telugu is what is on the
-// shopfronts, the bus boards and the pandal banners themselves. Reaching
-// for Hindi would be the outsider default, and the whole point of setting
-// a headline in script is that it belongs to the place.
-const telugu = Noto_Serif_Telugu({
-  variable: "--font-telugu",
-  subsets: ["telugu"],
-  weight: ["400", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -89,7 +79,7 @@ export const metadata: Metadata = {
 // THEME.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cn("antialiased", geistMono.variable, "font-sans", sans.variable, display.variable, telugu.variable)}>
+    <html lang="en" className={cn("antialiased", geistMono.variable, "font-sans", sans.variable, display.variable)}>
       {/* No h-full on either element, and this matters more than it looks.
           `height: 100%` pins the document to exactly the viewport, so a
           page taller than one screen renders its overflow but the window
