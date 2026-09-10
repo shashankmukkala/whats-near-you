@@ -280,5 +280,10 @@ for (const r of results) {
   if (!r.ok) console.log(`  FAIL  [${r.area}] ${r.what}${r.detail ? ` — ${r.detail}` : ""}`);
 }
 console.log(
-  `\n${results.filter((r) => r.ok).length} passed, ${new Set(failures.map((f) => `${f.area}|${f.what}|${f.detail}`)).size} distinct failure(s)\n`
+  `\n${results.filter((r) => r.ok).length} passed, ${new Set(failures.map((f) => `${f.area}|${f.what}|${f.detail}`)).size} distinct failure(s)`
 );
+// This run uploaded a banner on each advertise page to get past the
+// payment gate, and those files belong to no row — they are orphans the
+// moment the run ends. Said out loud rather than left to accumulate
+// quietly in the storage bill, which is how the first six got there.
+console.log("  (uploaded 2 test banners — npm run prune:uploads clears them once past the 6h grace)\n");
